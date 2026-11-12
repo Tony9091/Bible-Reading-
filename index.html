@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Bible Reading in 1 Year</title>
+<title>My Bible Reading</title>
 <meta name="theme-color" content="#8C1A39">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -158,6 +158,22 @@ ul.items{list-style:none;margin:0;padding:4px 0}
 .chb.tday{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .bookwhen{margin:8px 12px 2px;font-size:13px;color:var(--muted)}
 .paceq{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.flabel{font-size:13px;font-weight:600;color:var(--muted)}
+.choices{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.choice{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:11px 12px;font:inherit;cursor:pointer}
+.choice b{display:block;font-size:16px;line-height:1.3}
+.choice small{display:block;margin-top:2px;font-size:13px;line-height:1.35;color:var(--muted)}
+.choice .dot{flex:none;width:20px;height:20px;margin-top:1px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center}
+.choice[aria-checked="true"]{border-color:var(--accent);background:var(--soft)}
+.choice[aria-checked="true"] .dot{border-color:var(--accent)}
+.choice[aria-checked="true"] .dot::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.stepper{display:flex;align-items:center;gap:10px;margin-top:10px}
+.stepper output{flex:1;text-align:center;font-weight:700;font-size:16px}
+.stepbtn{flex:none;width:52px;height:46px;border-radius:12px;border:1.5px solid var(--accent);background:var(--card);color:var(--accent);font-size:26px;font-weight:700;line-height:1;cursor:pointer}
+.stepbtn:disabled{opacity:.35;cursor:default}
+.result{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:var(--good-soft);font-size:15px;line-height:1.45}
+.updline{margin:10px 0;font-weight:600}
+.linkbtn{display:block;width:100%;margin:0;border:0;border-top:1px solid var(--line);background:transparent;color:var(--accent);font:inherit;font-weight:700;padding:12px;text-align:center;cursor:pointer}
 .add{display:block;width:calc(100% - 24px);margin:8px 12px 10px;border:1.5px dashed var(--accent);background:transparent;color:var(--accent);border-radius:10px;padding:10px;font-weight:600}
 
 /* forms */
@@ -202,7 +218,7 @@ ol.steps li{margin:4px 0}
 .msgline.bad{color:var(--warn)}
 
 /* bottom tabs */
-nav.tabs{flex:none;display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);border-top:1px solid var(--line);padding:4px max(6px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 4px) max(6px, env(safe-area-inset-left))}
+nav.tabs{flex:none;display:grid;grid-template-columns:repeat(5,1fr);background:var(--card);border-top:1px solid var(--line);padding:4px max(6px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 4px) max(6px, env(safe-area-inset-left))}
 nav.tabs button{border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px 6px;color:var(--muted);font-size:12px;font-weight:600;border-radius:12px}
 nav.tabs button svg{width:24px;height:24px}
 nav.tabs button[aria-current="page"]{color:var(--accent);background:var(--soft)}
@@ -215,7 +231,7 @@ nav.tabs button[aria-current="page"]{color:var(--accent);background:var(--soft)}
 <header class="top">
   <div class="wrap">
     <div class="row1"><span>Your Bible reading</span><span class="status" id="status" data-s="local" role="status"><i></i><span id="statusText">Saved on this phone</span></span></div>
-    <h1 id="apptitle">Bible Reading in 1 Year</h1>
+    <h1 id="apptitle">My Bible Reading</h1>
     <div class="row3">
       <span class="behind" id="behind">Bible reading</span>
       <button class="editbtn" id="editBtn" type="button" aria-pressed="false" data-act="edit">Edit</button>
@@ -223,8 +239,9 @@ nav.tabs button[aria-current="page"]{color:var(--accent);background:var(--soft)}
   </div>
 </header>
 <p class="err" id="err" role="alert" hidden></p>
-<main id="main"><div class="wrap stack" id="view"><div class="card"><h2>Bible Reading in 1 Year</h2><p>One reading a day from Genesis to Revelation, with 2 a day to catch up when you fall behind.</p><p class="hint" style="margin:0">If the app doesn’t appear in a moment, close this page and open it again in Safari or Chrome.</p></div></div></main>
+<main id="main"><div class="wrap stack" id="view"><div class="card"><h2>My Bible Reading</h2><p>Track your Bible reading, a little each day, at your own pace. Everything stays private on your phone.</p><p class="hint" style="margin:0">If the app doesn’t appear in a moment, close this page and open it again in Safari or Chrome.</p></div></div></main>
 <nav class="tabs" aria-label="Sections">
+  <button type="button" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5 12 4l8.5 7.5"/><path d="M6 9.8V20h4.5v-5.5h3V20H18V9.8"/></svg>Home</button>
   <button type="button" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg>Today</button>
   <button type="button" data-tab="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z"/><path d="M12 6.5v13"/></svg>Plan</button>
   <button type="button" data-tab="notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5h10l4 4v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-14a1 1 0 0 1 1-1z"/><path d="M8 11h8M8 15h6"/></svg>Notes</button>
@@ -327,6 +344,7 @@ function computePlan(n, startDay, done, T, pace) {
 "use strict";
 const PLAN = {"start":"2026-05-26","books":["Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth","1 Samuel","2 Samuel","1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Esther","Job","Psalms","Proverbs","Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations","Ezekiel","Daniel","Hosea","Joel","Amos","Obadiah & Jonah","Micah","Nahum & Habakkuk","Zephaniah & Haggai","Zechariah","Malachi","Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus & Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John, 3 John & Jude","Revelation"],"readings":[[0,"1–3"],[0,"4–7"],[0,"8–11"],[0,"12–15"],[0,"16–18"],[0,"19–22"],[0,"23–24"],[0,"25–27"],[0,"28–30"],[0,"31–32"],[0,"33–34"],[0,"35–37"],[0,"38–40"],[0,"41–42"],[0,"43–45"],[0,"46–48"],[0,"49–50"],[1,"1–4"],[1,"5–7"],[1,"8–10"],[1,"11–13"],[1,"14–15"],[1,"16–18"],[1,"19–21"],[1,"22–25"],[1,"26–28"],[1,"29–30"],[1,"31–33"],[1,"34–35"],[1,"36–38"],[1,"39–40"],[2,"1–4"],[2,"5–7"],[2,"8–10"],[2,"11–13"],[2,"14–15"],[2,"16–18"],[2,"19–21"],[2,"22–23"],[2,"24–25"],[2,"26–27"],[3,"1–3"],[3,"4–6"],[3,"7–9"],[3,"10–12"],[3,"13–15"],[3,"16–18"],[3,"19–21"],[3,"22–24"],[3,"25–27"],[3,"28–30"],[3,"31–32"],[3,"33–36"],[4,"1–2"],[4,"3–4"],[4,"5–7"],[4,"8–10"],[4,"11–13"],[4,"14–16"],[4,"17–19"],[4,"20–22"],[4,"23–26"],[4,"27–28"],[4,"29–31"],[4,"32"],[4,"33–34"],[5,"1–4"],[5,"5–7"],[5,"8–9"],[5,"10–12"],[5,"13–15"],[5,"16–18"],[5,"19–21"],[5,"22–24"],[6,"1–2"],[6,"3–5"],[6,"6–7"],[6,"8–9"],[6,"10–11"],[6,"12–13"],[6,"14–16"],[6,"17–19"],[6,"20–21"],[7,"1–4"],[8,"1–2"],[8,"3–6"],[8,"7–9"],[8,"10–12"],[8,"13–14"],[8,"15–16"],[8,"17–18"],[8,"19–21"],[8,"22–24"],[8,"25–27"],[8,"28–31"],[9,"1–2"],[9,"3–5"],[9,"6–8"],[9,"9–12"],[9,"13–14"],[9,"15–16"],[9,"17–18"],[9,"19–20"],[9,"21–22"],[9,"23–24"],[10,"1–2"],[10,"3–5"],[10,"6–7"],[10,"8"],[10,"9–10"],[10,"11–12"],[10,"13–14"],[10,"15–17"],[10,"18–19"],[10,"20–21"],[10,"22"],[11,"1–3"],[11,"4–5"],[11,"6–8"],[11,"9–10"],[11,"11–13"],[11,"14–15"],[11,"16–17"],[11,"18–19"],[11,"20–22"],[11,"23–25"],[12,"1–2"],[12,"3–5"],[12,"6–7"],[12,"8–10"],[12,"11–12"],[12,"13–15"],[12,"16–17"],[12,"18–20"],[12,"21–23"],[12,"24–26"],[12,"27–29"],[13,"1–3"],[13,"4–6"],[13,"7–9"],[13,"10–14"],[13,"15–18"],[13,"19–22"],[13,"23–25"],[13,"26–28"],[13,"29–30"],[13,"31–33"],[13,"34–36"],[14,"1–3"],[14,"4–7"],[14,"8–10"],[15,"1–3"],[15,"4–6"],[15,"7–8"],[15,"9–10"],[15,"11–13"],[16,"1–4"],[16,"5–10"],[17,"1–5"],[17,"6–9"],[17,"10–14"],[17,"15–18"],[17,"19–20"],[17,"21–24"],[17,"25–29"],[17,"30–31"],[17,"32–34"],[17,"35–38"],[17,"39–42"],[18,"1–8"],[18,"9–16"],[18,"17–19"],[18,"20–25"],[18,"26–31"],[18,"32–35"],[18,"36–38"],[18,"39–42"],[18,"43–47"],[18,"48–52"],[18,"53–58"],[18,"59–64"],[18,"65–68"],[18,"69–72"],[18,"73–77"],[18,"78–79"],[18,"80–86"],[18,"87–90"],[18,"91–96"],[18,"97–103"],[18,"104–105"],[18,"106–108"],[18,"109–115"],[18,"116–119:63"],[18,"119:64–176"],[18,"120–129"],[18,"130–138"],[18,"139–144"],[18,"145–150"],[19,"1–4"],[19,"5–8"],[19,"9–12"],[19,"13–16"],[19,"17–19"],[19,"20–22"],[19,"23–27"],[19,"28–31"],[20,"1–4"],[20,"5–8"],[20,"9–12"],[21,"1–8"],[22,"1–4"],[22,"5–7"],[22,"8–10"],[22,"11–14"],[22,"15–19"],[22,"20–24"],[22,"25–28"],[22,"29–31"],[22,"32–35"],[22,"36–37"],[22,"38–40"],[22,"41–43"],[22,"44–47"],[22,"48–50"],[22,"51–55"],[22,"56–58"],[22,"59–62"],[22,"63–66"],[23,"1–3"],[23,"4–5"],[23,"6–7"],[23,"8–10"],[23,"11–13"],[23,"14–16"],[23,"17–20"],[23,"21–23"],[23,"24–26"],[23,"27–29"],[23,"30–31"],[23,"32–33"],[23,"34–36"],[23,"37–39"],[23,"40–42"],[23,"43–44"],[23,"45–48"],[23,"49–50"],[23,"51–52"],[24,"1–2"],[24,"3–5"],[25,"1–3"],[25,"4–6"],[25,"7–9"],[25,"10–12"],[25,"13–15"],[25,"16"],[25,"17–18"],[25,"19–21"],[25,"22–23"],[25,"24–26"],[25,"27–28"],[25,"29–31"],[25,"32–33"],[25,"34–36"],[25,"37–38"],[25,"39–40"],[25,"41–43"],[25,"44–45"],[25,"46–48"],[26,"1–2"],[26,"3–4"],[26,"5–7"],[26,"8–10"],[26,"11–12"],[27,"1–7"],[27,"8–14"],[28,"1–3"],[29,"1–5"],[29,"6–9"],[30,""],[31,"1–7"],[32,""],[33,""],[34,"1–7"],[34,"8–11"],[34,"12–14"],[35,"1–4"],[36,"1–4"],[36,"5–7"],[36,"8–10"],[36,"11–13"],[36,"14–17"],[36,"18–20"],[36,"21–23"],[36,"24–25"],[36,"26"],[36,"27–28"],[37,"1–3"],[37,"4–5"],[37,"6–8"],[37,"9–10"],[37,"11–13"],[37,"14–16"],[38,"1–2"],[38,"3–5"],[38,"6–7"],[38,"8–9"],[38,"10–11"],[38,"12–13"],[38,"14–17"],[38,"18–19"],[38,"20–22"],[38,"23–24"],[39,"1–3"],[39,"4–5"],[39,"6–7"],[39,"8–9"],[39,"10–12"],[39,"13–15"],[39,"16–18"],[39,"19–21"],[40,"1–3"],[40,"4–6"],[40,"7–8"],[40,"9–11"],[40,"12–14"],[40,"15–16"],[40,"17–19"],[40,"20–21"],[40,"22–23"],[40,"24–26"],[40,"27–28"],[41,"1–3"],[41,"4–7"],[41,"8–11"],[41,"12–16"],[42,"1–6"],[42,"7–10"],[42,"11–14"],[42,"15–16"],[43,"1–6"],[43,"7–10"],[43,"11–13"],[44,"1–6"],[45,"1–6"],[46,"1–4"],[47,"1–4"],[48,"1–5"],[49,"1–3"],[50,"1–6"],[51,"1–4"],[52,""],[53,"1–6"],[53,"7–10"],[53,"11–13"],[54,"1–5"],[55,"1–5"],[56,"1–3"],[57,"1–5"],[58,""],[59,"1–4"],[59,"5–9"],[59,"10–14"],[59,"15–18"],[59,"19–22"]]};
 const LS_KEY = "bible-reading-v2";
+const SAFE_KEY = "bible-reading-v2-safe";       // a copy of your reading, kept whenever the app updates itself
 const OLD_KEY = "bible-1yr-progress-v1";      // progress saved by the earlier version of this page
 const DOC_PATH = "reading/main";
 const PACE = 2;                               // catch-up pace: 2 readings a day
@@ -445,20 +463,44 @@ function planOptions(selKey){
     + `<optgroup label="One theme">${THEMES.map(t=>o("theme:"+t.id, t.name)).join("")}</optgroup>`;
 }
 const optList = (list, sel) => list.map(o=>`<option value="${o[0]}" ${o[0]===sel?"selected":""}>${esc(o[1])}</option>`).join("");
-// The pace fields under a plan picker (px "w" on the welcome screen, "m" in More)
-function paceFields(px, sp){
-  const wk = sp.kind === "week";
-  let h = `<div class="field" style="margin-top:12px"><label for="${px}-mode">Pace</label><select id="${px}-mode" ${wk?"disabled":""}>${wk ? `<option value="standard" selected>Standard: one section each weekday</option>` : optList(MODES, sp.mode)}</select></div>`;
-  if(isFlexSpec(sp) && sp.mode === "chapters") h += `<div class="field" style="margin-top:10px"><label for="${px}-per">Chapters a day</label><select id="${px}-per">${optList(PERDAY, sp.perDay)}</select></div>
-    <p class="hint" style="margin:6px 0 0">Reading only a few verses at a time? That’s fine. Pick 1 chapter every few days, and tick a chapter when you finish it.</p>`;
-  if(isFlexSpec(sp) && sp.mode === "finish") h += `<div class="field" style="margin-top:10px"><label for="${px}-months">Finish ${sp.kind === "theme" ? "this theme" : "the whole Bible"} in</label><select id="${px}-months">${optList(MONTHS, sp.months)}</select></div>`;
-  return h;
+// Choosing a plan: tap a card, and − / + for the amount (px "w" welcome, "m" Home, "t" Today)
+const KINDS = [["year","Whole Bible, in order","Genesis to Revelation"],["chrono","Whole Bible, in the order it was written","Book by book, from the oldest"],
+  ["week","A different section each day","History on Monday, Jesus’ life on Tuesday, and so on"],["theme","One theme","Like the prophets, or Jesus’ life"]];
+function choiceBtn(px, f, v, title, sub, on){
+  return `<button type="button" class="choice" role="radio" aria-checked="${on}" data-act="pick" data-px="${px}" data-f="${f}" data-v="${esc(v)}"><span class="dot" aria-hidden="true"></span><span><b>${esc(title)}</b>${sub ? `<small>${esc(sub)}</small>` : ""}</span></button>`;
 }
-function specFromFields(px, fb){
-  const v = (id) => { const el = document.getElementById(px + "-" + id); return el ? el.value : null; };
-  const k = parsePlanKey(v("plan") || planKey(fb), 1), mode = v("mode") || fb.mode;
-  return normSpec({ kind:k.kind, theme:k.theme, mode, perDay: v("per") != null ? +v("per") : fb.perDay, months: v("months") != null ? +v("months") : fb.months,
-    pace: planKey(k) === planKey(fb) && mode === "standard" ? fb.pace : 1 });
+function stepper(px, f, list, cur){
+  const i = Math.max(0, list.findIndex(o=>o[0]===cur)), per = f === "perDay";
+  return `<div class="stepper"><button type="button" class="stepbtn" data-act="step" data-px="${px}" data-f="${f}" data-d="-1" ${i<=0?"disabled":""} aria-label="${per?"Fewer chapters":"Less time"}">−</button>
+    <output id="${px}-${f}" aria-live="polite">${esc(list[i][1])}</output>
+    <button type="button" class="stepbtn" data-act="step" data-px="${px}" data-f="${f}" data-d="1" ${i>=list.length-1?"disabled":""} aria-label="${per?"More chapters":"More time"}">+</button></div>`;
+}
+function planPicker(px, sp){
+  let h = `<div class="field" id="${px}-plan"><span class="flabel">What would you like to read?</span>
+    <div class="choices" role="radiogroup" aria-label="What to read">${KINDS.map(k=>choiceBtn(px, "kind", k[0], k[1], k[2], sp.kind === k[0])).join("")}</div>
+    ${sp.kind === "theme" ? `<select id="${px}-theme" aria-label="Theme" style="margin-top:6px">${THEMES.map(t=>`<option value="${t.id}" ${t.id===sp.theme?"selected":""}>${esc(t.name)}</option>`).join("")}</select>` : ""}</div>
+  <div class="field" id="${px}-mode" style="margin-top:14px"><span class="flabel">How would you like to pace it?</span>`;
+  if(sp.kind === "week") h += `<p class="hint" style="margin:0">This plan has its own schedule: one section on each day of the week, with help catching up if you fall behind.</p>`;
+  else h += `<div class="choices" role="radiogroup" aria-label="Pace">
+      ${choiceBtn(px, "mode", "standard", "Standard schedule", (sp.kind === "theme" ? "Set readings each day, about 3 chapters." : "About 3 chapters a day, the whole Bible in a year.") + " Help catching up if you fall behind.", sp.mode === "standard")}
+      ${choiceBtn(px, "mode", "chapters", "My own chapters a day", "As little as 1 chapter a week. You’re never behind.", sp.mode === "chapters")}
+      ${choiceBtn(px, "mode", "finish", "Finish by a time I choose", "From 3 months to 5 years. You’re never behind.", sp.mode === "finish")}</div>`;
+  if(isFlexSpec(sp) && sp.mode === "chapters") h += stepper(px, "perDay", PERDAY, sp.perDay)
+    + `<p class="hint" style="margin:6px 0 0">Reading only a few verses at a time? That’s fine. Pick 1 chapter every few days, and tick a chapter when you finish it.</p>`;
+  if(isFlexSpec(sp) && sp.mode === "finish") h += stepper(px, "months", MONTHS, sp.months);
+  return h + `</div>`;
+}
+const sameSpec = (a, b) => planKey(a) === planKey(b) && a.mode === b.mode && a.pace === b.pace
+  && (a.mode !== "chapters" || a.perDay === b.perDay) && (a.mode !== "finish" || a.months === b.months);
+// What a plan comes to: its finish date, worked out for you
+function planResult(sp, c, welcome){
+  const N = c.order.length.toLocaleString("en-US");
+  if(sp.kind === "week") return `One reading from each section on its own day of the week${welcome ? ", ending <b>" + esc(fmt(c.lastDay, {year:true})) + "</b>" : ""}. If you fall behind, the app helps you catch up.`;
+  if(!isFlexSpec(sp)) return `${N} readings, about 3 chapters a day. ${welcome ? "Ends" : "The schedule ends"} <b>${esc(fmt(c.lastDay, {year:true}))}</b>. If you fall behind, the app plans 2 readings a day until you’re caught up.`;
+  if(!c.pool.length) return "You’ve read every chapter in this plan.";
+  const tail = " You’re never behind: read more or less any day and the date moves.";
+  if(sp.mode === "finish") return `${N} chapters. ${esc(cap(rateText(c.rate)))} to finish by <b>${esc(fmt(c.endBy, {year:true}))}</b>.` + tail;
+  return `${N} chapters. At ${esc(perLabel(sp.perDay))} you’ll finish <b>${esc(fmt(c.finish, {year:true}))}</b> (${esc(howLong(c.finish - Math.max(c.T, c.startDay) + 1))}).` + tail;
 }
 // The readings for a plan, built from the schedule's sets
 function bookOrder(spec){
@@ -548,7 +590,9 @@ function normalize(s){
 function readLocal(){
   try{
     const r = localStorage.getItem(LS_KEY);
-    if(r) return JSON.parse(r);
+    if(r){ try{ return JSON.parse(r); }catch(e){} }
+    const safe = localStorage.getItem(SAFE_KEY);
+    if(safe){ try{ return JSON.parse(safe); }catch(e){} }
     const old = localStorage.getItem(OLD_KEY);
     if(old){
       const o = JSON.parse(old), s = makeDefault();
@@ -571,7 +615,7 @@ let S = normalize(readLocal());
   S.start = st; S.readings.forEach((x,i)=>{ x.done = i < k ? "-" : ""; });
   S.setup = true; S.updatedAt = Date.now(); writeLocal();
 })();
-const ui = { tab:"today", day:null, edit:false, confirm:null, planScrolled:false, placeSel:null, more:0, moreDay:null, mSpec:null, wPlace:0 };
+const ui = { tab:"home", wStarted:false, day:null, edit:false, confirm:null, planScrolled:false, placeSel:null, more:0, moreDay:null, mSpec:null, wPlace:0 };
 
 const getP = (p) => p.split(".").reduce((o,k)=> o == null ? o : o[k], S);
 function setP(p, v){ const ks = p.split("."); let o = S; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]] == null) o[ks[i]] = {}; o = o[ks[i]]; } o[ks[ks.length-1]] = v; }
@@ -788,9 +832,8 @@ function renderToday(c){
     : { read:true, sub: c.sched(i) !== d ? "Scheduled " + fmt(c.sched(i)) : "On schedule" })).join("");
   const emptyMsg = d < T ? "Nothing was marked read on this day." : (!c.pool.length ? "You’ve finished the whole plan." : d < c.startDay ? "Your plan starts " + fmt(c.startDay) + "." : c.flex && c.rate < 1 ? "Keep going with the chapter you’re on." : "No reading planned for this day.");
   const onToday = new Set(items), moreBtn = c.flex && d === T && T >= c.startDay && c.pool.some(i => !onToday.has(i)) && !ui.edit;
-  const paceQ = c.flex && d === T && c.pool.length ? `<div class="paceq">${S.plan.mode === "finish"
-      ? `<div class="field"><label for="t-months">Finish in</label><select id="t-months">${optList(MONTHS, S.plan.months)}</select></div>`
-      : `<div class="field"><label for="t-per">Chapters a day</label><select id="t-per">${optList(PERDAY, S.plan.perDay)}</select></div>`}
+  const paceQ = c.flex && d === T && c.pool.length ? `<div class="paceq"><span class="flabel">${S.plan.mode === "finish" ? "Finish in" : "Chapters a day"}</span>${S.plan.mode === "finish"
+      ? stepper("t", "months", MONTHS, S.plan.months) : stepper("t", "perDay", PERDAY, S.plan.perDay)}
     <p class="hint" style="margin:8px 0 0">Read more or less any day, even a few verses at a time. Tick a chapter when you finish it, and your finish date moves to match.</p></div>` : "";
   const allDone = items.length && done === items.length && !ui.edit;
   let next = "";
@@ -888,37 +931,73 @@ function renderNotes(){
 }
 
 let placeMsg = "", backupMsg = { t:"", bad:false };
-function renderMore(c){
+function statsHTML(c){
+  return `<div class="stats">${c.flex ? `
+      <div>Read<b>${c.doneCount.toLocaleString("en-US")} of ${S.readings.length.toLocaleString("en-US")}</b></div>
+      <div>Pace<b>${c.pool.length ? esc(shortRate(c.rate)) : "Done"}</b></div>` : `
+      <div>Read<b>${c.doneCount} of ${S.readings.length}</b></div>
+      <div>Caught up<b>${!c.pool.length ? "Done" : c.behind > 0 ? esc(fmt(c.caughtUp,{weekday:false})) : "Yes"}</b></div>`}
+      <div>Finish<b>${c.finish == null ? "Done" : esc(fmt(c.finish,{weekday:false}))}</b></div></div>`;
+}
+function renderHome(c){
+  const T = c.T, items = c.todayList, done = items.filter(i=>S.readings[i].done).length;
+  const hr = new Date().getHours(), hello = hr < 12 ? "Good morning" : hr < 18 ? "Good afternoon" : "Good evening";
+  const rows = items.map(i => checkRow(c, i, c.flex ? { read:true, sub: c.rate < 1 && !S.readings[i].done ? "Take a few days if you like" : "" }
+    : { read:true, sub: c.sched(i) !== T ? "Scheduled " + fmt(c.sched(i)) : "On schedule" })).join("");
+  const emptyMsg = !c.pool.length ? "You’ve finished the whole plan." : T < c.startDay ? "Your plan starts " + fmt(c.startDay) + "." : c.flex && c.rate < 1 ? "Keep going with the chapter you’re on." : "Nothing planned for today.";
+  const onToday = new Set(items), moreBtn = c.flex && T >= c.startDay && c.pool.some(i => !onToday.has(i));
+  const allDone = items.length && done === items.length;
+  let next = "";
+  if(allDone){ const nx = Array.from(c.byDay.keys()).filter(k=>k>T).sort((a,b)=>a-b)[0];
+    if(nx != null) next = `Next: ${c.byDay.get(nx).map(i=>S.readings[i].t).join(" and ")} on ${fmt(nx)}.`; }
   const sel = ui.placeSel == null ? c.youPos : ui.placeSel;
   const opts = c.order.map((i,j)=>`<option value="${j}" ${j===sel?"selected":""}>${esc(S.readings[i].t)}</option>`).join("")
     + `<option value="${S.readings.length}" ${sel>=S.readings.length?"selected":""}>I’ve finished the whole plan</option>`;
-  const ms = ui.mSpec || S.plan, pc = previewPlan(()=>{ switchTo(ms); }), flex = isFlexSpec(ms);
-  const mDesc = ms.kind === "week" ? "One reading from each section on its own day of the week. If you fall behind, the app helps you catch up."
-    : !flex ? `About 3 chapters a day on set dates. If you fall behind, the app plans 2 readings a day until you’re caught up.`
-    : !pc.pool.length ? "You’ve read every chapter in this plan."
-    : (ms.mode === "finish" ? `${cap(rateText(pc.rate))} to finish by ${fmt(pc.endBy,{year:true})}.` : `At ${perLabel(ms.perDay)} you’ll finish ${fmt(pc.finish,{year:true})} (${howLong(pc.finish - Math.max(pc.T, pc.startDay) + 1)}).`)
-      + " There’s no falling behind: read more or less any day and the date moves.";
+  const ms = ui.mSpec || S.plan, pending = !!ui.mSpec, pc = pending ? previewPlan(()=>{ switchTo(ms); }) : c;
+  const updMsg = { checking:"Checking for updates…", updating:"Updating… your reading stays just as it is.", current:"You have the newest version.",
+    ready:"A new version is ready.", offline:"Couldn’t check just now. Try again when you’re online." }[upd.state] || "";
   return `
+  <div class="card"><h2>${hello}!</h2>
+    <div class="count">${esc(fmt(T, {long:true, weekday:true}))}</div>
+    <div class="statusline">${statusText(c)}</div></div>
+  <section class="slot" aria-label="Today’s reading on Home"><h3>Today’s reading <small>· ${done} of ${items.length} done</small></h3>
+    ${items.length ? `<ul class="items">${rows}</ul>` : `<p class="hint empty">${esc(emptyMsg)}</p>`}
+    ${moreBtn ? `<button type="button" class="add" data-act="more">+ Read one more chapter today</button>` : ""}
+    ${allDone ? `<div class="done-note">All done for today!${next?`<br><span class="hint" style="color:inherit;font-weight:500">${esc(next)}</span>`:""}</div>` : ""}
+    <button type="button" class="linkbtn" data-act="goto" data-t="today">Other days and today’s notes</button>
+  </section>
+  <div class="card"><h2>${S.plan.kind === "year" || S.plan.kind === "chrono" ? "Your place in the Bible" : "Your place in this plan"}</h2>
+    <p class="hint" style="margin:-4px 0 4px">${esc(planName())}</p>
+    ${stripHTML(c)}
+    ${statsHTML(c)}</div>
+  <section class="card"><h2>How to use this app</h2>
+    <p class="hint">A one-minute tour of ticking readings, your pace, notes, your plan and backups.</p>
+    <button type="button" class="btn ghost" style="width:100%;margin-top:8px" data-act="tour">Show me the tour</button>
+  </section>
   <section class="card"><h2>Your reading is private</h2>
     <div class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg><p>Everything you enter here (your plan, ticks and notes) is saved only on this device. Nothing is sent to a cloud or a server, and there’s no account, so nobody else can see it. Your reading is never public.</p></div>
-    <p class="hint" style="margin:0">The app itself loads from the web, and the “Read on wol.jw.org” links open jw.org’s website. What you enter never leaves this device. Because it’s kept only here, clearing your browser’s data or getting a new phone would remove it, so keep a backup code (below).</p>
+    <p class="hint" style="margin:0">The app itself loads from the web, and the “Read on wol.jw.org” links open jw.org’s website. What you enter never leaves this device. Because it’s kept only here, clearing your browser’s data or getting a new phone would remove it, so keep a backup code (in More).</p>
   </section>
-  <section class="card"><h2>Reading plan</h2>
-    <p style="margin:0 0 10px"><b>${esc(planName())}</b></p>
-    <div class="field"><label for="m-plan">Change to</label><select id="m-plan">${planOptions(planKey(ms))}</select></div>
-    ${paceFields("m", ms)}
-    <p class="plandesc">${esc(mDesc)}</p>
-    <p class="hint" style="margin:8px 0 10px">What you’ve already read stays ticked, even when you switch between the standard schedule and chapters a day. Your start date stays the same.</p>
-    <button type="button" class="btn ${ui.confirm==="switch"?"warn":"ghost"}" style="width:100%" data-act="switchPlan">${ui.confirm==="switch"?"Tap again to switch plans":"Switch to this plan"}</button>
+  <section class="card" id="plancard"><h2>Reading plan</h2>
+    <p class="hint" style="margin:0 0 10px">${pending ? "Your plan now" : "Your plan"}: <b style="color:var(--ink)">${esc(planName())}</b></p>
+    ${planPicker("m", ms)}
+    <p class="result">${planResult(ms, pc, false)}</p>
+    ${pending ? `<p class="hint" style="margin:8px 0 10px">What you’ve already read stays ticked. Your start date stays the same.</p>
+    <div class="btns"><button type="button" class="btn" data-act="switchPlan">Use this plan</button><button type="button" class="btn ghost" data-act="cancelPlan">Keep my plan</button></div>` : ""}
   </section>
   <section class="card"><h2>Where you are</h2>
     <div class="field"><label for="f-place">${chapterMode() ? "Next chapter to read" : "Next reading to read"}</label><select id="f-place">${opts}</select></div>
-    <p class="hint" style="margin:8px 0 10px">Marks every reading before it as read, and that reading and everything after it as not read yet.</p>
+    <p class="hint" style="margin:8px 0 10px">Marks everything before it as read, and that one and everything after it as not read yet.</p>
     <button type="button" class="btn ${ui.confirm==="place"?"warn":"ghost"}" style="width:100%" data-act="place">${ui.confirm==="place"?"Tap again to set your place":"Set my place"}</button>
   </section>
   <section class="card"><h2>Start date</h2>
     <div class="field"><label for="f-start">Start date</label><input type="date" id="f-start" data-path="start" value="${esc(S.start)}"></div>
     <p class="hint" style="margin:8px 0 0">Your plan counts from this date. On the standard schedule, catch-up is 2 readings a day.</p>
+  </section>
+  <section class="card"><h2>Updates</h2>
+    <p class="hint" style="margin:0">The app updates itself when you open it and a new version is out. Updates never change your reading plan, ticks or notes. They stay on this device.</p>
+    <p class="updline" role="status">Version ${APP_VERSION} · ${esc(APP_DATE)}${updMsg ? `<br><span class="hint">${esc(updMsg)}</span>` : ""}</p>
+    <button type="button" class="btn ghost" style="width:100%" data-act="${upd.state === "ready" ? "applyUpdate" : "checkUpdate"}" ${upd.state === "checking" || upd.state === "updating" ? "disabled" : ""}>${upd.state === "ready" ? "Update now" : "Check for updates"}</button>
   </section>
   <section class="card"><h2>Keep it on your phone</h2>
     <p class="hint">Do this once, from this page in your phone’s web browser:</p>
@@ -927,6 +1006,15 @@ function renderMore(c){
     <p style="margin:8px 0 0"><b>Android (Chrome)</b></p>
     <ol class="steps"><li>Tap the <b>⋮</b> menu.</li><li>Tap <b>Add to Home screen</b> (or <b>Install app</b>).</li></ol>
   </section>
+  <section class="card"><h2>Share it with someone</h2>
+    <p class="hint">Anyone can use this for their own Bible reading. Send them this address. Each person’s progress stays private on their own phone and is never shared.</p>
+    <p style="margin:8px 0 10px;font-weight:700;word-break:break-all" id="share-url">${esc(location.origin + location.pathname)}</p>
+    <button type="button" class="btn ghost" style="width:100%" data-act="copyLink">Copy the address</button>
+  </section>`;
+}
+
+function renderMore(){
+  return `
   <section class="card"><h2>Backup</h2>
     <p class="hint">Your progress lives only on this device. Copy a backup code now and then and keep it in a note or a text to yourself. If your progress ever goes missing, or you get a new phone, paste the code here to get it all back.</p>
     <div class="btns" style="margin-top:10px">
@@ -936,15 +1024,6 @@ function renderMore(c){
     <div class="field" style="margin-top:10px"><label for="f-backup">Backup code</label><textarea id="f-backup" spellcheck="false" autocomplete="off" placeholder="Paste a backup code here, then tap Restore from code." style="min-height:80px;font:13px/1.4 ui-monospace,Menlo,monospace"></textarea></div>
     ${backupMsg.t ? `<p class="msgline ${backupMsg.bad?"bad":""}" role="status">${esc(backupMsg.t)}</p>` : ""}
   </section>
-  <section class="card"><h2>Share it with someone</h2>
-    <p class="hint">Anyone can use this for their own Bible reading. Send them this address. Each person’s progress stays private on their own phone and is never shared.</p>
-    <p style="margin:8px 0 10px;font-weight:700;word-break:break-all" id="share-url">${esc(location.origin + location.pathname)}</p>
-    <button type="button" class="btn ghost" style="width:100%" data-act="copyLink">Copy the address</button>
-  </section>
-  <section class="card"><h2>How to use this app</h2>
-    <p class="hint">A one-minute tour of ticking readings, your pace, notes, plans and backups.</p>
-    <button type="button" class="btn ghost" style="width:100%;margin-top:8px" data-act="tour">Show me the tour</button>
-  </section>
   <section class="card"><h2>Where the plans come from</h2>
     <p class="hint">Only from jw.org and wol.jw.org:</p>
     <ul class="srcs">
@@ -953,7 +1032,7 @@ function renderMore(c){
       <li><a href="https://www.jw.org/en/library/magazines/g200904/How-Can-I-Make-Bible-Reading-Enjoyable/" target="_blank" rel="noopener">How Can I Make Bible Reading Enjoyable?</a>: a different section each day</li>
       <li><a href="https://wol.jw.org/en/wol/b/r1/lp-e/nwtsty/1/1" target="_blank" rel="noopener">Watchtower Online Library</a>: the Read links for each chapter</li>
     </ul>
-    <p class="hint" style="margin:8px 0 0">“Chapters a day” and “How long to take” use the same books in the same order, one chapter at a time.</p>
+    <p class="hint" style="margin:8px 0 0">“My own chapters a day” and “Finish by a time I choose” use the same books in the same order, one chapter at a time.</p>
   </section>
   <section class="card"><h2>Start over</h2>
     <p class="hint">Erases your progress, notes and any changes to the readings on this phone, and starts again from the Get started screen. Copy a backup code first if you might want them back.</p>
@@ -962,28 +1041,27 @@ function renderMore(c){
 }
 
 function renderWelcome(){
-  const c0 = P || plan(), key = planKey(S.plan), flex = isFlexSpec(S.plan), k = Math.max(0, Math.min(ui.wPlace || 0, S.readings.length - 1));
+  const c0 = P || plan(), flex = isFlexSpec(S.plan), started = !!ui.wStarted;
+  const k = started ? Math.max(0, Math.min(ui.wPlace || 0, S.readings.length - 1)) : 0;
   const opts = c0.order.map((i,j)=>`<option value="${j}" ${j===k?"selected":""}>${esc(S.readings[i].t)}</option>`).join("");
   const c = previewPlan(()=>{ const cc = plan(); S.readings.forEach((x,i)=>{ x.done = cc.rank[i] < k ? "-" : ""; }); });
-  const n = S.readings.length.toLocaleString("en-US"), from = Math.max(c.T, c.startDay);
-  const desc = !flex ? `${n} readings · ends ${esc(fmt(c.lastDay, {year:true}))} if you start on the date below${S.plan.kind === "week" ? " · one from each section on its own day of the week" : ""}. If you fall behind, the app helps you catch up.`
-    : !c.pool.length ? `${n} chapters`
-    : (S.plan.mode === "finish" ? `${n} chapters · ${esc(rateText(c.rate))} to finish by <b>${esc(fmt(c.endBy, {year:true}))}</b>.`
-      : `${n} chapters · at ${esc(perLabel(S.plan.perDay))} you’ll finish <b>${esc(fmt(c.finish, {year:true}))}</b> (${esc(howLong(c.finish - from + 1))}).`)
-      + " No falling behind: read more or less any day and the date moves.";
+  const what = flex ? "chapter" : "reading";
   return `
   <div class="card"><h2>Welcome!</h2>
-    <p>Read the whole Bible in order, in the order the books were written, a different section each day, or one theme at a time. Follow the standard schedule (about 3 chapters a day, the whole Bible in a year), or choose how many chapters you read a day or how long you want to take. Only the standard schedule keeps track of falling behind, and plans 2 readings a day until you’re caught up.</p>
+    <p>Pick what you’d like to read and how fast. You can change it any time on the Home page.</p>
     <div class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg><p><b>Your reading is private.</b> Your plan, ticks and notes are saved only on this device. Nothing is sent to a cloud or a server, there’s no account, and your reading is never public.</p></div>
     <p class="hint" style="margin:0"><b>On iPhone:</b> add it to your Home Screen first (Share, then Add to Home Screen), then open it from the icon and set it up there. The icon keeps its own copy of your progress.</p></div>
   <div class="card"><h2>Get started</h2>
-    <div class="field"><label for="w-plan">Reading plan</label><select id="w-plan">${planOptions(key)}</select></div>
-    ${paceFields("w", S.plan)}
-    <p class="plandesc">${desc}</p>
-    <div class="field" style="margin-top:12px"><label for="w-start">Your start date</label><input type="date" id="w-start" value="${esc(S.start)}"></div>
-    <div class="field" style="margin-top:12px"><label for="w-place">${flex ? "Your next chapter" : "Your next reading"}</label><select id="w-place">${opts}</select></div>
-    <p class="hint" style="margin:10px 0 12px">Starting fresh? Leave the start date as today and your next ${flex ? "chapter" : "reading"} as the first one. Already reading? Pick the day you started and the next ${flex ? "chapter" : "reading"} you haven’t read yet.</p>
-    <button type="button" class="btn" style="width:100%" data-act="begin">Start my plan</button></div>`;
+    ${planPicker("w", S.plan)}
+    <p class="result">${planResult(S.plan, c, true)}</p>
+    <div class="field" id="w-when" style="margin-top:14px"><span class="flabel">Are you just starting?</span>
+      <div class="choices" role="radiogroup" aria-label="Just starting">
+        ${choiceBtn("w", "when", "new", "Start from the beginning", "Starting today with the first " + what + ".", !started)}
+        ${choiceBtn("w", "when", "started", "I’ve already started", "Pick the day you started and your next " + what + ".", started)}</div>
+      ${started ? `<div class="field" style="margin-top:10px"><label for="w-start">The day you started</label><input type="date" id="w-start" value="${esc(S.start)}"></div>
+      <div class="field" style="margin-top:10px"><label for="w-place">Your next ${what}</label><select id="w-place">${opts}</select></div>` : ""}
+    </div>
+    <button type="button" class="btn" style="width:100%;margin-top:14px" data-act="begin">Start my plan</button></div>`;
 }
 
 function render(){
@@ -992,15 +1070,14 @@ function render(){
   const eb = document.getElementById("editBtn");
   eb.textContent = ui.edit ? "Done" : "Edit"; eb.setAttribute("aria-pressed", String(ui.edit));
   if(c.flex && ui.edit){ ui.edit = false; eb.textContent = "Edit"; eb.setAttribute("aria-pressed", "false"); }
-  eb.hidden = !S.setup || ui.tab === "notes" || ui.tab === "more" || !!c.flex;
-  document.getElementById("apptitle").textContent = S.setup && c.flex ? "My Bible Reading" : "Bible Reading in 1 Year";
+  eb.hidden = !S.setup || ui.tab === "home" || ui.tab === "notes" || ui.tab === "more" || !!c.flex;
   document.getElementById("behind").textContent = !S.setup ? "Welcome" : !c.pool.length ? "Finished!"
     : c.flex ? (c.T < c.startDay ? "Starts " + fmt(c.startDay, {weekday:false}) : "Finish " + fmt(c.finish, {weekday:false}))
     : c.behind > 0 ? `${c.behind}${unit(c.behind)} behind` : c.T < c.startDay ? "Starts " + fmt(c.startDay, {weekday:false}) : "On schedule";
   document.querySelectorAll("nav.tabs button").forEach(a=>{ if(a.dataset.tab===ui.tab) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
   const v = document.getElementById("view");
   const focusId = document.activeElement && document.activeElement.id;
-  v.innerHTML = !S.setup ? renderWelcome() : ui.tab==="plan" ? renderPlan(c) : ui.tab==="notes" ? renderNotes() : ui.tab==="more" ? renderMore(c) : renderToday(c);
+  v.innerHTML = !S.setup ? renderWelcome() : ui.tab==="plan" ? renderPlan(c) : ui.tab==="notes" ? renderNotes() : ui.tab==="more" ? renderMore() : ui.tab==="home" ? renderHome(c) : renderToday(c);
   if(focusId && /^f-[dp]-r\d+$/.test(focusId)){ const f = document.getElementById(focusId); if(f) f.focus({ preventScroll:true }); }
 }
 
@@ -1020,14 +1097,14 @@ let toastT = null;
 function toast(msg){ const t = document.getElementById("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(()=>{ t.hidden = true; }, 2600); }
 // ---------------------------------------------------------------- guided tour
 const TOUR = [
-  { title:"Your plan is ready", text:"Here’s a quick look at how to use it each day. It takes about a minute." },
+  { tab:"home", title:"Your plan is ready", text:"This is your Home page, where the app opens. It shows today’s reading, your progress, and your plan and settings. Here’s a quick look at the rest. It takes about a minute." },
   { tab:"today", sel:'#view section[aria-label="Readings"]', title:"Tick off each reading",
     text:"Tap the box when you’ve read it. Tap “Read on wol.jw.org” to open that chapter of the Bible." },
   { tab:"today", sel:"#view .days", title:"Pick a day",
     text:"Swipe through the days. Tap one to see what’s planned for it, or what you read that day." },
   { tab:"today", sel:"#view .card", title:"Falling behind is OK",
     text:"If you miss some days, the app plans 2 readings a day until you’re caught up, and tells you the date you’ll get there.",
-    titleFlex:"Read more or less", textFlex:"Read as much or as little as you like, even a few verses at a time. Tick a chapter when you finish it. Your finish date moves to match, and you’re never behind. Change your pace here any time." },
+    titleFlex:"Read more or less", textFlex:"Read as much or as little as you like, even a few verses at a time. Tick a chapter when you finish it. Your finish date moves to match, and you’re never behind. Change your pace here with − and + any time." },
   { tab:"today", sel:'#view section[aria-label="Notes for this day"]', title:"Write your thoughts",
     text:"Jot down thoughts or favorite verses for any day. The Notes tab keeps them all in one place." },
   { tab:"today", sel:'nav.tabs [data-tab="plan"]', title:"See the whole plan",
@@ -1035,23 +1112,21 @@ const TOUR = [
     textFlex:"The Plan tab shows every chapter, book by book, with when you’ll get there. Tap a chapter number to tick it. Tap Plan again to jump back to today." },
   { tab:"today", sel:"#editBtn", noFlex:true, title:"Make changes",
     text:"Tap Edit to change the wording of a reading. On the Plan tab you can also add or delete readings. Tap Done when finished." },
-  { tab:"today", sel:'nav.tabs [data-tab="more"]', title:"Plans, your place and backups",
-    text:"In More you can switch plans, choose the standard schedule or your own chapters a day, set where you are, change your start date, and copy a backup code." },
+  { tab:"today", sel:'nav.tabs [data-tab="home"]', title:"Your plan and settings",
+    text:"On Home you can change your reading plan and pace, set where you are or your start date, take this tour again, and get updates. More has your backup code." },
   { title:"Keep your progress safe", text:"Everything stays with you: your progress is saved only on this device, never in a cloud or on a server, and nobody else can see it. Because it’s only here, copy a backup code from More now and then and keep it in a note or a text to yourself. On iPhone, always open the app from its Home Screen icon." },
 ];
 const fieldOf = (id) => () => { const el = document.getElementById(id); return el ? el.closest(".field") : null; };
 const TOUR_SETUP = [
   { title:"Welcome!", text:"This app helps you read the whole Bible, a little each day. There’s no sign-in or password. Everything you enter is saved only on this device, never in a cloud or on a server, so your reading stays private. Here’s how to get started." },
-  { sel:fieldOf("w-plan"), title:"Choose how to read",
-    text:"“In order (Genesis to Revelation)” is the one-year plan. You can also read in the order the books were written, a different section each day, or one theme at a time." },
+  { sel:fieldOf("w-plan"), title:"Choose what to read",
+    text:"Tap one: the whole Bible in order, in the order it was written, a different section each day, or one theme." },
   { sel:fieldOf("w-mode"), title:"Choose your pace",
-    text:"The standard schedule sets about 3 chapters a day and finishes the Bible in a year, with help catching up if you fall behind. Or choose how many chapters you want a day, even 1 every few days, or how long you want to take. Your finish date shows right below." },
-  { sel:fieldOf("w-start"), title:"Your start date",
-    text:"Leave it as today if you’re starting now. Already reading? Pick the day you started, and the app works out where you should be." },
-  { sel:fieldOf("w-place"), title:"Your next reading",
-    text:"New to the plan? Leave it on the first reading. Otherwise pick the first reading you haven’t read yet. Everything before it is marked as read." },
+    text:"The standard schedule is about 3 chapters a day and finishes the Bible in a year, with help catching up if you fall behind. Or pick your own chapters a day (even 1 a week) or how long you want to take, using − and +. Your finish date shows right below." },
+  { sel:fieldOf("w-when"), title:"Just starting?",
+    text:"Leave it on Start from the beginning. Already reading? Tap I’ve already started, then pick the day you started and your next reading. Everything before it is marked as read." },
   { sel:'[data-act="begin"]', title:"Start your plan",
-    text:"Tap Start my plan when you’re ready. Then the tour shows you how to tick off readings, catch up, write notes and more." },
+    text:"Tap Start my plan when you’re ready. Then the tour shows you around." },
 ];
 let tourI = -1, tourTarget = null, tourSteps = TOUR;
 function startTour(){
@@ -1069,7 +1144,7 @@ function endTour(skipped){
     return;
   }
   if(!S.tourSeen){ S.tourSeen = true; save(); }
-  go("today");
+  go("home");
 }
 function showTourStep(){
   const st = tourSteps[tourI];
@@ -1124,7 +1199,7 @@ window.addEventListener("resize", placeSpot);
 document.getElementById("main").addEventListener("scroll", placeSpot, { passive:true });
 
 function go(tab){
-  ui.tab = tab; ui.confirm = null; if(tab !== "today") ui.edit = ui.edit && tab === "plan"; if(tab !== "more") ui.mSpec = null;
+  ui.tab = tab; ui.confirm = null; if(tab !== "today") ui.edit = ui.edit && tab === "plan"; if(tab !== "home") ui.mSpec = null;
   if(location.hash.replace("#","") !== tab){ try{ history.replaceState(null, "", "#" + tab); }catch(e){} }
   render(); document.getElementById("main").scrollTop = 0;
   if(tab === "today") centerChip();
@@ -1224,6 +1299,19 @@ document.addEventListener("click", (e)=>{
     case "day": ui.day = +b.dataset.d; render(); centerChip(); return;
     case "gotoDay": ui.day = +b.dataset.d; go("today"); return;
     case "jump": jumpToday(true); return;
+    case "goto": go(b.dataset.t); return;
+    case "pick": case "step": {
+      const px = b.dataset.px, f = b.dataset.f;
+      if(f === "when"){ ui.wStarted = b.dataset.v === "started"; if(!ui.wStarted){ S.start = isoOf(todayNum()); ui.wPlace = 0; } render(); refocus(b); return; }
+      const base = px === "m" ? (ui.mSpec || S.plan) : S.plan;
+      let ch;
+      if(act === "pick") ch = f === "kind" ? (b.dataset.v === "theme" ? { kind:"theme", theme: base.kind === "theme" ? base.theme : THEMES[0].id } : { kind:b.dataset.v }) : { [f]: b.dataset.v };
+      else { const list = f === "perDay" ? PERDAY : MONTHS, i = Math.max(0, list.findIndex(o=>o[0]===base[f]));
+        ch = { [f]: list[Math.max(0, Math.min(list.length - 1, i + +b.dataset.d))][0] }; }
+      applyPick(px, ch); refocus(b); return; }
+    case "cancelPlan": ui.mSpec = null; render(); return;
+    case "checkUpdate": checkForUpdate(true); return;
+    case "applyUpdate": applyUpdate(); return;
     case "more": { const T = todayNum(); if(ui.moreDay !== T){ ui.moreDay = T; ui.more = 0; } ui.more++; render(); return; }
     case "del": { const i = +b.dataset.i; const t = S.readings[i] && S.readings[i].t;
       S.readings.splice(i,1); save(); render(); toast(`Deleted ${t}`); return; }
@@ -1238,20 +1326,22 @@ document.addEventListener("click", (e)=>{
       S.readings.forEach((x,i)=>{ if(cc.rank[i] < k){ if(!x.done) x.done = "-"; } else x.done = ""; });
       save(); render(); toast(k < S.readings.length ? `Your place: ${S.readings[cc.order[k]].t}` : "Marked the whole plan as read"); return; }
     case "switchPlan": {
-      if(ui.confirm !== "switch"){ ui.confirm = "switch"; render(); return; }
-      ui.confirm = null;
-      switchTo(ui.mSpec || S.plan);
+      if(!ui.mSpec) return;
+      switchTo(ui.mSpec);
       ui.mSpec = null; ui.edit = false; ui.day = null; ui.placeSel = null; ui.planScrolled = false;
       save(); render();
       toast(P && P.flex && P.finish != null ? "Plan changed · finish " + fmt(P.finish, {weekday:false}) : "Plan changed"); return; }
     case "clearAll": {
       if(ui.confirm !== "clear"){ ui.confirm = "clear"; render(); return; }
-      ui.confirm = null; S = makeDefault(); S.updatedAt = Date.now(); ui.day = null; ui.edit = false; save(); go("today"); toast("Starting over"); return; }
+      ui.confirm = null; S = makeDefault(); S.updatedAt = Date.now(); ui.day = null; ui.edit = false; ui.wStarted = false; ui.wPlace = 0;
+      try{ localStorage.removeItem(SAFE_KEY); }catch(err){}
+      save(); go("home"); toast("Starting over"); return; }
     case "begin": {
-      const st = document.getElementById("w-start").value, k = +document.getElementById("w-place").value;
+      const se = document.getElementById("w-start"), pe = document.getElementById("w-place");
+      const st = se ? se.value : isoOf(todayNum()), k = pe ? +pe.value : 0;
       if(!ISO.test(st)){ toast("Pick your start date first"); return; }
-      S.start = st; const cc = plan(); S.readings.forEach((x,i)=>{ x.done = cc.rank[i] < k ? "-" : ""; }); S.setup = true; ui.day = null; ui.wPlace = 0;
-      save(); go("today"); if(!S.tourSeen) setTimeout(startTour, 350); else toast("Your plan is ready"); return; }
+      S.start = st; const cc = plan(); S.readings.forEach((x,i)=>{ x.done = cc.rank[i] < k ? "-" : ""; }); S.setup = true; ui.day = null; ui.wPlace = 0; ui.wStarted = false;
+      save(); go("home"); if(!S.tourSeen) setTimeout(startTour, 350); else toast("Your plan is ready"); return; }
     case "tour": startTour(); return;
     case "copyLink": {
       const url = location.origin + location.pathname;
@@ -1274,6 +1364,22 @@ document.addEventListener("click", (e)=>{
       return; }
   }
 });
+// A choice on the welcome screen (w), on Home (m: waits for "Use this plan"), or the pace on Today (t: right away)
+function applyPick(px, ch){
+  if(px === "m"){ const sp = normSpec(Object.assign({}, ui.mSpec || S.plan, ch)); ui.mSpec = sameSpec(sp, S.plan) ? null : sp; render(); return; }
+  if(px === "w"){
+    const spec = normSpec(Object.assign({}, S.plan, ch));
+    const rebuild = isFlexSpec(spec) !== isFlexSpec(S.plan) || planKey(spec) !== planKey(S.plan) || (!isFlexSpec(spec) && spec.pace !== S.plan.pace);
+    S.plan = spec; if(rebuild){ S.readings = buildReadings(spec); ui.wPlace = 0; }
+    render(); return;
+  }
+  S.plan = normSpec(Object.assign({}, S.plan, ch)); save(); render();
+  if(P && P.finish != null) toast(S.plan.mode === "finish" ? cap(rateText(P.rate)) : "New finish date: " + fmt(P.finish, {year:true}));
+}
+function refocus(b){
+  const q = '[data-act="' + b.dataset.act + '"][data-px="' + b.dataset.px + '"][data-f="' + b.dataset.f + '"]' + (b.dataset.v != null ? '[data-v="' + b.dataset.v + '"]' : '[data-d="' + b.dataset.d + '"]');
+  const el = document.querySelector(q); if(el && !el.disabled){ try{ el.focus({ preventScroll:true }); }catch(e){} }
+}
 function showBackupMsg(){
   const card = document.getElementById("f-backup"); if(!card) return;
   let p = card.closest(".card").querySelector(".msgline");
@@ -1289,20 +1395,9 @@ document.addEventListener("change", (e)=>{
     save(); render(); return;
   }
   if(el.id === "f-place"){ ui.placeSel = +el.value; if(ui.confirm){ ui.confirm = null; render(); } return; }
-  if(el.id === "t-per" || el.id === "t-months"){               // change your pace right from Today
-    S.plan = normSpec(Object.assign({}, S.plan, el.id === "t-per" ? { perDay:+el.value } : { months:+el.value }));
-    save(); render();
-    if(P && P.finish != null) toast(S.plan.mode === "finish" ? cap(rateText(P.rate)) : "New finish date: " + fmt(P.finish, {year:true}));
-    return; }
-  if(/^m-(plan|mode|per|months)$/.test(el.id)){ ui.mSpec = specFromFields("m", ui.mSpec || S.plan); ui.confirm = null; render(); return; }
+  if(/^[wm]-theme$/.test(el.id)){ applyPick(el.id.charAt(0), { kind:"theme", theme:el.value }); return; }
   if(el.id === "w-place"){ ui.wPlace = +el.value; render(); return; }
-  if(/^w-(plan|mode|per|months|start)$/.test(el.id)){
-    const st = document.getElementById("w-start").value; if(ISO.test(st)) S.start = st;
-    const spec = specFromFields("w", S.plan);
-    const rebuild = isFlexSpec(spec) !== isFlexSpec(S.plan) || planKey(spec) !== planKey(S.plan) || (!isFlexSpec(spec) && spec.pace !== S.plan.pace);
-    S.plan = spec; if(rebuild){ S.readings = buildReadings(spec); ui.wPlace = 0; }
-    render(); return;
-  }
+  if(el.id === "w-start"){ if(ISO.test(el.value)) S.start = el.value; render(); return; }
   const p = el.dataset.path; if(!p) return;
   if(p === "start"){ if(ISO.test(el.value) && el.value !== S.start){ S.start = el.value; save(); render(); toast("Start date changed"); } return; }
   needsRender = true; maybeRender();
@@ -1320,7 +1415,7 @@ document.addEventListener("focusout", maybeRender);
 
 function fromHash(){
   const h = (location.hash||"").replace("#","");
-  ui.tab = ["today","plan","notes","more"].includes(h) ? h : "today";
+  ui.tab = ["home","today","plan","notes","more"].includes(h) ? h : "home";
   ui.confirm = null;
   render();
   if(ui.tab === "today") centerChip();
@@ -1334,8 +1429,51 @@ function checkDay(){ const t = todayNum(); if(t !== lastT){ lastT = t; ui.day = 
 document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) checkDay(); });
 setInterval(checkDay, 60000);
 
+// ---------------------------------------------------------------- updates: the app checks for a newer version and updates itself.
+// Only the app's own files change. Your reading (plan, ticks, notes) stays on this device, and a safety copy is kept first.
+const APP_VERSION = "9";
+const APP_DATE = "Nov 12, 2026";
+const upd = { state:"idle", v:"", at:0 };
+function showUpd(){ if(ui.tab === "home" && S.setup && !isTyping()) render(); }
+async function checkForUpdate(manual){
+  if(!/^https?:$/.test(location.protocol) || upd.state === "checking" || upd.state === "updating") return;
+  upd.state = "checking"; if(manual) showUpd();
+  try{
+    const r = await fetch(new URL("index.html", location.href).href + "?v=" + Date.now(), { cache:"no-store" });
+    if(!r.ok) throw new Error("status " + r.status);
+    const m = /const APP_VERSION = "(\d+)"/.exec(await r.text());
+    upd.v = m ? m[1] : ""; upd.state = m && +m[1] > +APP_VERSION ? "ready" : "current";
+  }catch(e){ upd.state = "offline"; }
+  upd.at = Date.now();
+  if(upd.state === "ready" && (manual || autoOK())) return applyUpdate();
+  showUpd();
+}
+function autoOK(){
+  let tried = ""; try{ tried = sessionStorage.getItem("br-tried") || ""; }catch(e){}
+  return tried !== upd.v && S.setup && !isTyping() && tourI < 0 && !ui.edit;   // never in the middle of something
+}
+async function applyUpdate(){
+  upd.state = "updating"; showUpd();
+  try{ writeLocal(); localStorage.setItem(SAFE_KEY, JSON.stringify(S)); }catch(e){}
+  try{ sessionStorage.setItem("br-tried", upd.v || "?"); sessionStorage.setItem("br-from", APP_VERSION); }catch(e){}
+  try{
+    const here = location.href.split("#")[0];
+    await Promise.all([here, new URL("./", here).href, new URL("index.html", here).href, new URL("sw.js", here).href]
+      .map(u => fetch(u, { cache:"reload" }).catch(()=>{})));
+    const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration();
+    if(reg) await reg.update().catch(()=>{});
+  }catch(e){}
+  location.reload();
+}
+
 fromHash();
 if(!S.tourSeen) setTimeout(startTour, 500);
+(function afterUpdate(){
+  let from = null; try{ from = sessionStorage.getItem("br-from"); sessionStorage.removeItem("br-from"); }catch(e){}
+  if(from && +APP_VERSION > +from) setTimeout(()=>toast("Updated to the newest version. Your reading is just as you left it."), 700);
+})();
+setTimeout(()=>checkForUpdate(false), 4000);
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden && Date.now() - upd.at > 10 * 60 * 1000) checkForUpdate(false); });
 setStatus("local");
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{}); }catch(e){}
 if("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")){

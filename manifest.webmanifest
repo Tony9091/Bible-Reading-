@@ -1,7 +1,7 @@
 {
-  "name": "Bible Reading in 1 Year",
+  "name": "My Bible Reading",
   "short_name": "Bible Reading",
-  "description": "Daily Bible reading plan with a 2-a-day catch-up, tick boxes and notes. Saves on your phone.",
+  "description": "Track your Bible reading at your own pace or on the standard schedule. Private: saved only on your phone.",
   "scope": "./",
   "display": "standalone",
   "background_color": "#FBF7F8",
