@@ -1,5 +1,5 @@
 // Offline support: use the network when it's there (so updates arrive), fall back to the saved copy when it isn't.
-const CACHE = "bible-reading-v4";
+const CACHE = "bible-reading-v5";
 const FILES = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)).then(() => self.skipWaiting()));

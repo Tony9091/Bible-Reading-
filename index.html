@@ -52,6 +52,25 @@ button{cursor:pointer}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 
+/* ---------- guided tour */
+.tour{position:fixed;inset:0;z-index:60}
+.tour[hidden]{display:none}
+.tour-spot{position:fixed;border-radius:14px;pointer-events:none;box-shadow:0 0 0 3px #fff,0 0 0 6px var(--band),0 0 0 200vmax rgba(18,8,12,.62);transition:left .25s ease,top .25s ease,width .25s ease,height .25s ease}
+.tour-spot.none{box-shadow:0 0 0 200vmax rgba(18,8,12,.62)}
+.tour-card{position:fixed;left:50%;transform:translateX(-50%);width:min(92vw,420px);background:var(--card);color:var(--ink);border-radius:16px;padding:16px 16px 12px;box-shadow:0 12px 32px rgba(0,0,0,.35)}
+.tour-card.at-top{top:calc(env(safe-area-inset-top) + 14px)}
+.tour-card.at-bottom{bottom:calc(env(safe-area-inset-bottom) + 86px)}
+.tour-card.at-middle{top:50%;transform:translate(-50%,-50%)}
+.tour-step{margin:0;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--accent)}
+.tour-card h2{margin:4px 0 6px;font:600 21px/1.25 var(--display);text-wrap:balance}
+.tour-card p.tour-text{margin:0;font-size:16px;line-height:1.45}
+.tour-dots{display:flex;gap:5px;margin-top:12px}
+.tour-dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.tour-dots i.on{background:var(--band)}
+.tour-btns{display:flex;align-items:center;gap:8px;margin-top:12px}
+.tour-btns .skip{margin-right:auto;border:0;background:none;color:var(--muted);font-weight:600;padding:10px 4px;min-height:44px}
+.tour-btns .btn{min-height:44px;padding:10px 18px}
+
 /* ---------- top band */
 .top{flex:none;background:var(--band);color:#fff;padding:calc(env(safe-area-inset-top) + 10px) max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left))}
 .wrap{max-width:640px;margin:0 auto}
@@ -203,6 +222,20 @@ nav.tabs button[aria-current="page"]{color:var(--accent);background:var(--soft)}
   <button type="button" data-tab="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18.5" cy="12" r="1.6"/></svg>More</button>
 </nav>
 <div class="toast" id="toast" hidden></div>
+<div class="tour" id="tour" hidden role="dialog" aria-modal="true" aria-labelledby="tour-title" aria-describedby="tour-text">
+  <div class="tour-spot none" id="tour-spot"></div>
+  <div class="tour-card at-middle" id="tour-card">
+    <p class="tour-step" id="tour-step"></p>
+    <h2 id="tour-title"></h2>
+    <p class="tour-text" id="tour-text"></p>
+    <div class="tour-dots" id="tour-dots" aria-hidden="true"></div>
+    <div class="tour-btns">
+      <button type="button" class="skip" data-tour="skip">Skip tour</button>
+      <button type="button" class="btn ghost" data-tour="back">Back</button>
+      <button type="button" class="btn" data-tour="next" id="tour-next">Next</button>
+    </div>
+  </div>
+</div>
 
 <script>
 window.addEventListener("error", function (e) {
@@ -392,7 +425,7 @@ function wolUrl(t){
 
 function makeDefault(){
   const today = new Date(); const todayISO = isoOf(dayOf(today.getFullYear(), today.getMonth()+1, today.getDate()));
-  return { v:2, updatedAt:0, setup:false, start:todayISO, notes:"", dayNotes:{}, plan:{ kind:"year", theme:"", pace:1 },
+  return { v:2, updatedAt:0, setup:false, tourSeen:false, start:todayISO, notes:"", dayNotes:{}, plan:{ kind:"year", theme:"", pace:1 },
     readings: PLAN.readings.map((r,i)=>({ id:"r"+i, t:label0(i), done:"" })) };
 }
 
@@ -409,6 +442,7 @@ function normalize(s){
   if(!s.archive || typeof s.archive !== "object" || Array.isArray(s.archive)) s.archive = {};
   if(!s.dayNotes || typeof s.dayNotes !== "object" || Array.isArray(s.dayNotes)) s.dayNotes = {};
   if(typeof s.setup !== "boolean") s.setup = true;     // anything saved before this option existed was already set up
+  if(typeof s.tourSeen !== "boolean") s.tourSeen = false;
   s.plan = parsePlanKey(s.plan ? planKey(s.plan) : "year", s.plan && s.plan.pace);   // older saves: the one-year plan, one a day
   s.v = 2; s.updatedAt = Number(s.updatedAt) || 0;
   return s;
@@ -712,6 +746,10 @@ function renderMore(c){
     <p style="margin:8px 0 10px;font-weight:700;word-break:break-all" id="share-url">${esc(location.origin + location.pathname)}</p>
     <button type="button" class="btn ghost" style="width:100%" data-act="copyLink">Copy the address</button>
   </section>
+  <section class="card"><h2>How to use this app</h2>
+    <p class="hint">A one-minute tour of ticking readings, catching up, notes, plans and backups.</p>
+    <button type="button" class="btn ghost" style="width:100%;margin-top:8px" data-act="tour">Show me the tour</button>
+  </section>
   <section class="card"><h2>Where the plans come from</h2>
     <p class="hint">Only from jw.org and wol.jw.org:</p>
     <ul class="srcs">
@@ -775,6 +813,88 @@ function maybeRender(){
 }
 let toastT = null;
 function toast(msg){ const t = document.getElementById("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(()=>{ t.hidden = true; }, 2600); }
+// ---------------------------------------------------------------- guided tour
+const TOUR = [
+  { title:"Welcome to your reading plan", text:"Here’s a quick tour of how everything works. It takes about a minute." },
+  { tab:"today", sel:'#view section[aria-label="Readings"]', title:"Tick off each reading",
+    text:"Tap the box when you’ve read it. Tap “Read on wol.jw.org” to open that chapter of the Bible." },
+  { tab:"today", sel:"#view .days", title:"Pick a day",
+    text:"Swipe through the days. Tap one to see what’s planned for it, or what you read that day." },
+  { tab:"today", sel:"#view .card", title:"Falling behind is OK",
+    text:"If you miss some days, the app plans 2 readings a day until you’re caught up, and tells you the date you’ll get there." },
+  { tab:"today", sel:'#view section[aria-label="Notes for this day"]', title:"Write your thoughts",
+    text:"Jot down thoughts or favorite verses for any day. The Notes tab keeps them all in one place." },
+  { tab:"today", sel:'nav.tabs [data-tab="plan"]', title:"See the whole plan",
+    text:"The Plan tab lists every reading with its date. Tap Plan again to jump back to today." },
+  { tab:"today", sel:"#editBtn", title:"Make changes",
+    text:"Tap Edit to change the wording of a reading. On the Plan tab you can also add or delete readings. Tap Done when finished." },
+  { tab:"today", sel:'nav.tabs [data-tab="more"]', title:"Plans, your place and backups",
+    text:"In More you can switch to another reading plan or a slower pace, set where you are, change your start date, and copy a backup code." },
+  { title:"Keep your progress safe", text:"Your progress is saved only on this phone. Copy a backup code from More now and then, and keep it in a note or a text to yourself. On iPhone, always open the app from its Home Screen icon." },
+];
+let tourI = -1, tourTarget = null;
+function startTour(){
+  if(!S.setup) return;
+  ui.edit = false; ui.confirm = null; tourI = 0;
+  document.getElementById("tour").hidden = false;
+  showTourStep();
+}
+function endTour(){
+  tourI = -1; tourTarget = null;
+  document.getElementById("tour").hidden = true;
+  if(!S.tourSeen){ S.tourSeen = true; save(); }
+  go("today");
+}
+function showTourStep(){
+  const st = TOUR[tourI];
+  if(st.tab && ui.tab !== st.tab) go(st.tab);
+  document.getElementById("tour-step").textContent = "Step " + (tourI + 1) + " of " + TOUR.length;
+  document.getElementById("tour-title").textContent = st.title;
+  document.getElementById("tour-text").textContent = st.text;
+  document.getElementById("tour-dots").innerHTML = TOUR.map((_,k)=>`<i class="${k===tourI?"on":""}"></i>`).join("");
+  document.querySelector('[data-tour="back"]').hidden = tourI === 0;
+  const next = document.getElementById("tour-next");
+  next.textContent = tourI === TOUR.length - 1 ? "Done" : tourI === 0 ? "Start the tour" : "Next";
+  tourTarget = st.sel ? document.querySelector(st.sel) : null;
+  if(tourTarget && tourTarget.closest("main")) tourTarget.scrollIntoView({ block:"center" });
+  placeSpot(); requestAnimationFrame(placeSpot); setTimeout(placeSpot, 150);
+  try{ next.focus({ preventScroll:true }); }catch(e){}
+}
+function placeSpot(){
+  if(tourI < 0) return;
+  const spot = document.getElementById("tour-spot"), card = document.getElementById("tour-card");
+  const t = tourTarget && document.body.contains(tourTarget) ? tourTarget : null;
+  card.classList.remove("at-top","at-bottom","at-middle");
+  if(!t){ spot.classList.add("none"); spot.style.cssText = "left:50%;top:50%;width:0;height:0"; card.classList.add("at-middle"); return; }
+  const r = t.getBoundingClientRect(), pad = 6;
+  spot.classList.remove("none");
+  spot.style.cssText = `left:${r.left - pad}px;top:${r.top - pad}px;width:${r.width + pad*2}px;height:${r.height + pad*2}px`;
+  card.classList.add(r.top + r.height / 2 > window.innerHeight / 2 ? "at-top" : "at-bottom");
+}
+document.addEventListener("click", (e)=>{
+  const b = e.target.closest("[data-tour]"); if(!b || tourI < 0) return;
+  e.stopPropagation();
+  const a = b.dataset.tour;
+  if(a === "skip") return endTour();
+  if(a === "back"){ tourI = Math.max(0, tourI - 1); return showTourStep(); }
+  if(tourI >= TOUR.length - 1) return endTour();
+  tourI++; showTourStep();
+}, true);
+document.addEventListener("keydown", (e)=>{
+  if(tourI < 0) return;
+  if(e.key === "Escape"){ e.preventDefault(); endTour(); }
+  else if(e.key === "ArrowRight"){ e.preventDefault(); document.getElementById("tour-next").click(); }
+  else if(e.key === "ArrowLeft" && tourI > 0){ e.preventDefault(); document.querySelector('[data-tour="back"]').click(); }
+  else if(e.key === "Tab"){   // keep keyboard focus inside the tour card
+    const f = Array.from(document.querySelectorAll("#tour-card button")).filter(x=>!x.hidden);
+    const i = f.indexOf(document.activeElement);
+    if(e.shiftKey && i <= 0){ e.preventDefault(); f[f.length-1].focus(); }
+    else if(!e.shiftKey && i === f.length - 1){ e.preventDefault(); f[0].focus(); }
+  }
+});
+window.addEventListener("resize", placeSpot);
+document.getElementById("main").addEventListener("scroll", placeSpot, { passive:true });
+
 function go(tab){
   ui.tab = tab; ui.confirm = null; if(tab !== "today") ui.edit = ui.edit && tab === "plan";
   if(location.hash.replace("#","") !== tab){ try{ history.replaceState(null, "", "#" + tab); }catch(e){} }
@@ -876,7 +996,8 @@ document.addEventListener("click", (e)=>{
       const st = document.getElementById("w-start").value, k = +document.getElementById("w-place").value;
       if(!ISO.test(st)){ toast("Pick your start date first"); return; }
       S.start = st; const cc = plan(); S.readings.forEach((x,i)=>{ x.done = cc.rank[i] < k ? "-" : ""; }); S.setup = true; ui.day = null;
-      save(); go("today"); toast("Your plan is ready"); return; }
+      save(); go("today"); if(!S.tourSeen) setTimeout(startTour, 350); else toast("Your plan is ready"); return; }
+    case "tour": startTour(); return;
     case "copyLink": {
       const url = location.origin + location.pathname;
       const fb = ()=>{ const el = document.getElementById("share-url"); if(el && window.getSelection){ const r = document.createRange(); r.selectNodeContents(el); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); } toast("Press and hold the address, then tap Copy"); };
@@ -952,6 +1073,7 @@ document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) checkDa
 setInterval(checkDay, 60000);
 
 fromHash();
+if(S.setup && !S.tourSeen) setTimeout(startTour, 500);
 setStatus("local");
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{}); }catch(e){}
 if("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")){
