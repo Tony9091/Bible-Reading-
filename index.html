@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bible Reading in 1 Year</title>
+<meta name="theme-color" content="#8C1A39">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bible Reading">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+/* Layout idea: one-screen phone app. Wine-colored title band on top, scrolling content in the middle,
+   four tabs pinned to the bottom within thumb reach. The Bible drawn as a strip with a ribbon bookmark. */
+:root{
+  --accent:#9A1F3F;        /* wine for text, borders, icons */
+  --band:#8C1A39;          /* wine fill behind white text */
+  --soft:#F8E6EC;          /* highlighted rows */
+  --ink:#24181D;
+  --muted:#6F6067;
+  --paper:#FBF7F8;
+  --card:#FFFFFF;
+  --line:#EEDBE2;
+  --good:#22704A;
+  --good-soft:#E1F0E7;
+  --warn:#9A4A06;
+  --warn-soft:#FBEEDB;
+  --display:"Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --body:-apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --accent:#F08AA6; --band:#7A1733; --soft:#3A1F29; --ink:#F6ECEF; --muted:#C3AFB7;
+    --paper:#140E11; --card:#20171B; --line:#3A2830; --good:#63C78F; --good-soft:#173020; --warn:#F2AD57; --warn-soft:#3B2A12;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --accent:#F08AA6; --band:#7A1733; --soft:#3A1F29; --ink:#F6ECEF; --muted:#C3AFB7;
+  --paper:#140E11; --card:#20171B; --line:#3A2830; --good:#63C78F; --good-soft:#173020; --warn:#F2AD57; --warn-soft:#3B2A12;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{display:flex;flex-direction:column;background:var(--paper);color:var(--ink);font:16px/1.4 var(--body);-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- top band */
+.top{flex:none;background:var(--band);color:#fff;padding:calc(env(safe-area-inset-top) + 10px) max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left))}
+.wrap{max-width:640px;margin:0 auto}
+.top .row1{display:flex;justify-content:space-between;align-items:center;font-size:13px;opacity:.95}
+.status{display:inline-flex;align-items:center;gap:6px}
+.status i{width:8px;height:8px;border-radius:50%;background:#fff;opacity:.9}
+.status[data-s="local"] i{background:#FFD54F}
+.status[data-s="saving"] i{opacity:.5}
+h1{font:600 clamp(22px,6vw,28px)/1.15 var(--display);margin:4px 0 10px;text-wrap:balance;letter-spacing:.2px}
+.row3{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.behind{display:inline-flex;align-items:center;background:rgba(255,255,255,.16);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:700;letter-spacing:.2px}
+.editbtn{border:1.5px solid rgba(255,255,255,.8);background:transparent;color:#fff;border-radius:999px;padding:7px 16px;font-weight:600;min-height:38px}
+.editbtn[aria-pressed="true"]{background:#fff;color:var(--band);border-color:#fff}
+
+/* ---------- content */
+main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px max(16px, env(safe-area-inset-right)) 28px max(16px, env(safe-area-inset-left))}
+.stack{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.card h2{font:600 19px/1.25 var(--display);margin:0 0 8px;text-wrap:balance}
+.card p{margin:0 0 8px}
+.hint{color:var(--muted);font-size:14px}
+.editnote{background:var(--soft);border:1px dashed var(--accent);border-radius:12px;padding:10px 14px;font-size:14px}
+.err{background:var(--warn-soft);color:var(--warn);border-radius:12px;padding:10px 14px;font-weight:700;margin:12px 16px 0}
+.err[hidden]{display:none}
+
+/* day chips */
+.days{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;margin:0 -2px;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.chip{flex:none;min-width:58px;border:1.5px solid var(--line);background:var(--card);border-radius:14px;padding:7px 8px 6px;text-align:center;line-height:1.1}
+.chip b{display:block;font-size:15px}
+.chip small{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.chip.today{border-color:var(--accent)}
+.chip.alldone small{color:var(--good);font-weight:700}
+.chip[aria-pressed="true"]{background:var(--band);border-color:var(--band);color:#fff}
+.chip[aria-pressed="true"] small{color:#fff;opacity:.9}
+
+.dayhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.dayhead h2{margin:0;font:600 24px/1.2 var(--display)}
+.pill{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;background:var(--soft);color:var(--accent);border-radius:999px;padding:3px 9px;vertical-align:middle}
+.progress{height:6px;border-radius:6px;background:var(--line);overflow:hidden;margin:10px 0 2px}
+.progress > div{height:100%;background:var(--band)}
+.count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.statusline{margin-top:8px;font-size:15px}
+.statusline b{color:var(--warn)}
+.statusline b.ok{color:var(--good)}
+
+.slot{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+.slot > h3{margin:0;background:var(--band);color:#fff;font:700 14px/1 var(--body);letter-spacing:.6px;text-transform:uppercase;padding:9px 14px;text-align:center}
+.slot > h3 small{font-weight:600;opacity:.85;letter-spacing:.3px}
+ul.items{list-style:none;margin:0;padding:4px 0}
+.item{padding:2px 12px;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item.main{background:var(--soft);border-left:4px solid var(--band)}
+.check{display:flex;align-items:center;gap:12px;min-height:50px;cursor:pointer;padding:4px 0}
+.check input{position:absolute;opacity:0;width:1px;height:1px}
+.box{flex:none;width:26px;height:26px;border:2px solid var(--accent);border-radius:8px;display:grid;place-items:center;background:var(--card)}
+.check input:checked + .box{background:var(--band);border-color:var(--band)}
+.check input:checked + .box::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.check input:focus-visible + .box{outline:3px solid var(--accent);outline-offset:2px}
+.t{font:500 18px/1.25 var(--display)}
+.check input:checked ~ .t{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.when{margin-left:auto;text-align:right;font-size:13px;line-height:1.25;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.when b{display:block;color:var(--ink);font-size:14px}
+.item.main .when b{color:var(--accent)}
+.tag{display:block;margin:-6px 0 6px 38px;font-size:12px;font-weight:600;color:var(--accent)}
+.empty{padding:14px;margin:0;text-align:center}
+.done-note{margin:4px 12px 10px;padding:10px 12px;border-radius:10px;background:var(--good-soft);color:var(--good);font-weight:700;text-align:center}
+
+/* edit mode rows */
+.erow{display:flex;gap:8px;align-items:center;padding:6px 0}
+.txt{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px 10px;font-size:16px}
+.icon{flex:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;color:var(--muted)}
+.icon svg{width:18px;height:18px}
+.add{display:block;width:calc(100% - 24px);margin:8px 12px 10px;border:1.5px dashed var(--accent);background:transparent;color:var(--accent);border-radius:10px;padding:10px;font-weight:600}
+
+/* forms */
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:13px;font-weight:600;color:var(--muted)}
+.field input,.field select,.field textarea{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px;font-size:16px;width:100%}
+textarea{resize:vertical;min-height:96px}
+.notearea{display:block;width:calc(100% - 24px);margin:10px 12px 12px;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:10px 12px;font-size:16px;min-height:90px;resize:vertical}
+
+/* Bible strip */
+.strip{margin:6px 0 2px}
+.srow{position:relative;height:18px;font-size:12px;font-weight:700}
+.srow.above{margin-bottom:12px}
+.srow.below{margin-top:12px}
+.slabel{position:absolute;top:0;white-space:nowrap}
+.slabel.you{color:var(--accent)}
+.slabel.sched{color:var(--muted)}
+.bar{position:relative;height:14px;border-radius:4px;background:var(--line)}
+.bar .fill{position:absolute;top:0;bottom:0;left:0;background:var(--ink);border-radius:4px 0 0 4px}
+.bar .gap{position:absolute;top:0;bottom:0;background-color:var(--soft);background-image:repeating-linear-gradient(135deg,var(--accent) 0 2px,transparent 2px 7px);opacity:.6}
+.bar .nt{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--muted)}
+.bar .now{position:absolute;top:-5px;bottom:-5px;width:2px;margin-left:-1px;background:var(--ink)}
+.bar .ribbon{position:absolute;top:-9px;width:14px;height:32px;margin-left:-7px;background:var(--band);clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%)}
+.ends{display:flex;justify-content:space-between;margin-top:4px;font-size:12px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.stats div{font-size:12px;color:var(--muted)}
+.stats b{display:block;margin-top:2px;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:11px 16px;font-weight:700;border:1.5px solid var(--band);background:var(--band);color:#fff;text-decoration:none;min-height:46px}
+.btn.ghost{background:transparent;color:var(--accent);border-color:var(--accent)}
+.btn.warn{background:var(--warn);border-color:var(--warn);color:#fff}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btns .full{grid-column:1/-1}
+ol.steps{margin:6px 0 0;padding-left:20px}
+ol.steps li{margin:4px 0}
+.dnote{padding:10px 0;border-bottom:1px solid var(--line)}
+.dnote:last-child{border-bottom:0}
+.dnote button{border:0;background:none;padding:0;color:var(--accent);font-weight:700;font-size:14px}
+.dnote p{margin:4px 0 0;white-space:pre-wrap}
+.msgline{font-size:14px;font-weight:600;color:var(--good);margin:8px 0 0}
+.msgline.bad{color:var(--warn)}
+
+/* bottom tabs */
+nav.tabs{flex:none;display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);border-top:1px solid var(--line);padding:4px max(6px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 4px) max(6px, env(safe-area-inset-left))}
+nav.tabs button{border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px 6px;color:var(--muted);font-size:12px;font-weight:600;border-radius:12px}
+nav.tabs button svg{width:24px;height:24px}
+nav.tabs button[aria-current="page"]{color:var(--accent);background:var(--soft)}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 84px);transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.2);max-width:90vw;text-align:center;z-index:5}
+.toast[hidden]{display:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="row1"><span>Catch-up plan · 2 a day</span><span class="status" id="status" data-s="local" role="status"><i></i><span id="statusText">Saved on this phone</span></span></div>
+    <h1>Bible Reading in 1 Year</h1>
+    <div class="row3">
+      <span class="behind" id="behind">2 readings a day</span>
+      <button class="editbtn" id="editBtn" type="button" aria-pressed="false" data-act="edit">Edit</button>
+    </div>
+  </div>
+</header>
+<p class="err" id="err" role="alert" hidden></p>
+<main id="main"><div class="wrap stack" id="view"><div class="card"><h2>Your catch-up plan</h2>
+<p>Read 2 a day starting Wed, Nov 11 and you’re caught up Fri, Jan 1, 2027. Then one a day until Mon, May 24, 2027.</p>
+<p class="hint" style="margin:0">If the tick boxes don’t appear, close this page and open it again.</p></div>
+<section class="slot"><h3>November 2026</h3><ul class="items">
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Kings 4–8</span><span class="when"><b>Wed, Nov 11</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Kings 9–13</span><span class="when"><b>Thu, Nov 12</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Kings 14–17</span><span class="when"><b>Fri, Nov 13</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Kings 18–22</span><span class="when"><b>Sat, Nov 14</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Kings 23–25 · 1 Chronicles 1–2</span><span class="when"><b>Sun, Nov 15</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Chronicles 3–7</span><span class="when"><b>Mon, Nov 16</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Chronicles 8–12</span><span class="when"><b>Tue, Nov 17</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Chronicles 13–17</span><span class="when"><b>Wed, Nov 18</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Chronicles 18–23</span><span class="when"><b>Thu, Nov 19</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Chronicles 24–29</span><span class="when"><b>Fri, Nov 20</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 1–6</span><span class="when"><b>Sat, Nov 21</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 7–14</span><span class="when"><b>Sun, Nov 22</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 15–22</span><span class="when"><b>Mon, Nov 23</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 23–28</span><span class="when"><b>Tue, Nov 24</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 29–33</span><span class="when"><b>Wed, Nov 25</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 34–36 · Ezra 1–3</span><span class="when"><b>Thu, Nov 26</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezra 4–10</span><span class="when"><b>Fri, Nov 27</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Nehemiah 1–6</span><span class="when"><b>Sat, Nov 28</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Nehemiah 7–10</span><span class="when"><b>Sun, Nov 29</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Nehemiah 11–13 · Esther 1–4</span><span class="when"><b>Mon, Nov 30</b></span></div></li>
+</ul></section>
+<section class="slot"><h3>December 2026</h3><ul class="items">
+<li class="item"><div class="check" style="cursor:default"><span class="t">Esther 5–10 · Job 1–5</span><span class="when"><b>Tue, Dec 1</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Job 6–14</span><span class="when"><b>Wed, Dec 2</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Job 15–20</span><span class="when"><b>Thu, Dec 3</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Job 21–29</span><span class="when"><b>Fri, Dec 4</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Job 30–34</span><span class="when"><b>Sat, Dec 5</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Job 35–42</span><span class="when"><b>Sun, Dec 6</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 1–16</span><span class="when"><b>Mon, Dec 7</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 17–25</span><span class="when"><b>Tue, Dec 8</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 26–35</span><span class="when"><b>Wed, Dec 9</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 36–42</span><span class="when"><b>Thu, Dec 10</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 43–52</span><span class="when"><b>Fri, Dec 11</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 53–64</span><span class="when"><b>Sat, Dec 12</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 65–72</span><span class="when"><b>Sun, Dec 13</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 73–79</span><span class="when"><b>Mon, Dec 14</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 80–90</span><span class="when"><b>Tue, Dec 15</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 91–103</span><span class="when"><b>Wed, Dec 16</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 104–108</span><span class="when"><b>Thu, Dec 17</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 109–119:63</span><span class="when"><b>Fri, Dec 18</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 119:64–129</span><span class="when"><b>Sat, Dec 19</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 130–144</span><span class="when"><b>Sun, Dec 20</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 145–150 · Proverbs 1–4</span><span class="when"><b>Mon, Dec 21</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Proverbs 5–12</span><span class="when"><b>Tue, Dec 22</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Proverbs 13–19</span><span class="when"><b>Wed, Dec 23</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Proverbs 20–27</span><span class="when"><b>Thu, Dec 24</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Proverbs 28–31 · Ecclesiastes 1–4</span><span class="when"><b>Fri, Dec 25</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ecclesiastes 5–12</span><span class="when"><b>Sat, Dec 26</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Song of Solomon 1–8 · Isaiah 1–4</span><span class="when"><b>Sun, Dec 27</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 5–10</span><span class="when"><b>Mon, Dec 28</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 11–19</span><span class="when"><b>Tue, Dec 29</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 20–28</span><span class="when"><b>Wed, Dec 30</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 29–35</span><span class="when"><b>Thu, Dec 31</b></span></div></li>
+</ul></section>
+<section class="slot"><h3>January 2027</h3><ul class="items">
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 36–40</span><span class="when"><b>Fri, Jan 1</b></span></div></li>
+<li class="item"><div class="done-note" style="margin:8px 0">Caught up! From here, one reading a day.</div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 41–43</span><span class="when"><b>Sat, Jan 2</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 44–47</span><span class="when"><b>Sun, Jan 3</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 48–50</span><span class="when"><b>Mon, Jan 4</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 51–55</span><span class="when"><b>Tue, Jan 5</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 56–58</span><span class="when"><b>Wed, Jan 6</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 59–62</span><span class="when"><b>Thu, Jan 7</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 63–66</span><span class="when"><b>Fri, Jan 8</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 1–3</span><span class="when"><b>Sat, Jan 9</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 4–5</span><span class="when"><b>Sun, Jan 10</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 6–7</span><span class="when"><b>Mon, Jan 11</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 8–10</span><span class="when"><b>Tue, Jan 12</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 11–13</span><span class="when"><b>Wed, Jan 13</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 14–16</span><span class="when"><b>Thu, Jan 14</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 17–20</span><span class="when"><b>Fri, Jan 15</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 21–23</span><span class="when"><b>Sat, Jan 16</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 24–26</span><span class="when"><b>Sun, Jan 17</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 27–29</span><span class="when"><b>Mon, Jan 18</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 30–31</span><span class="when"><b>Tue, Jan 19</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 32–33</span><span class="when"><b>Wed, Jan 20</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 34–36</span><span class="when"><b>Thu, Jan 21</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 37–39</span><span class="when"><b>Fri, Jan 22</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 40–42</span><span class="when"><b>Sat, Jan 23</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 43–44</span><span class="when"><b>Sun, Jan 24</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 45–48</span><span class="when"><b>Mon, Jan 25</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 49–50</span><span class="when"><b>Tue, Jan 26</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 51–52</span><span class="when"><b>Wed, Jan 27</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Lamentations 1–2</span><span class="when"><b>Thu, Jan 28</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Lamentations 3–5</span><span class="when"><b>Fri, Jan 29</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 1–3</span><span class="when"><b>Sat, Jan 30</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 4–6</span><span class="when"><b>Sun, Jan 31</b></span></div></li>
+</ul></section>
+<section class="slot"><h3>February 2027</h3><ul class="items">
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 7–9</span><span class="when"><b>Mon, Feb 1</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 10–12</span><span class="when"><b>Tue, Feb 2</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 13–15</span><span class="when"><b>Wed, Feb 3</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 16</span><span class="when"><b>Thu, Feb 4</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 17–18</span><span class="when"><b>Fri, Feb 5</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 19–21</span><span class="when"><b>Sat, Feb 6</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 22–23</span><span class="when"><b>Sun, Feb 7</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 24–26</span><span class="when"><b>Mon, Feb 8</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 27–28</span><span class="when"><b>Tue, Feb 9</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 29–31</span><span class="when"><b>Wed, Feb 10</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 32–33</span><span class="when"><b>Thu, Feb 11</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 34–36</span><span class="when"><b>Fri, Feb 12</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 37–38</span><span class="when"><b>Sat, Feb 13</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 39–40</span><span class="when"><b>Sun, Feb 14</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 41–43</span><span class="when"><b>Mon, Feb 15</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 44–45</span><span class="when"><b>Tue, Feb 16</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 46–48</span><span class="when"><b>Wed, Feb 17</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Daniel 1–2</span><span class="when"><b>Thu, Feb 18</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Daniel 3–4</span><span class="when"><b>Fri, Feb 19</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Daniel 5–7</span><span class="when"><b>Sat, Feb 20</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Daniel 8–10</span><span class="when"><b>Sun, Feb 21</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Daniel 11–12</span><span class="when"><b>Mon, Feb 22</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Hosea 1–7</span><span class="when"><b>Tue, Feb 23</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Hosea 8–14</span><span class="when"><b>Wed, Feb 24</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Joel 1–3</span><span class="when"><b>Thu, Feb 25</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Amos 1–5</span><span class="when"><b>Fri, Feb 26</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Amos 6–9</span><span class="when"><b>Sat, Feb 27</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Obadiah &amp; Jonah</span><span class="when"><b>Sun, Feb 28</b></span></div></li>
+</ul></section>
+<section class="slot"><h3>March 2027</h3><ul class="items">
+<li class="item"><div class="check" style="cursor:default"><span class="t">Micah 1–7</span><span class="when"><b>Mon, Mar 1</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Nahum &amp; Habakkuk</span><span class="when"><b>Tue, Mar 2</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Zephaniah &amp; Haggai</span><span class="when"><b>Wed, Mar 3</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Zechariah 1–7</span><span class="when"><b>Thu, Mar 4</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Zechariah 8–11</span><span class="when"><b>Fri, Mar 5</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Zechariah 12–14</span><span class="when"><b>Sat, Mar 6</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Malachi 1–4</span><span class="when"><b>Sun, Mar 7</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 1–4</span><span class="when"><b>Mon, Mar 8</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 5–7</span><span class="when"><b>Tue, Mar 9</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 8–10</span><span class="when"><b>Wed, Mar 10</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 11–13</span><span class="when"><b>Thu, Mar 11</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 14–17</span><span class="when"><b>Fri, Mar 12</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 18–20</span><span class="when"><b>Sat, Mar 13</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 21–23</span><span class="when"><b>Sun, Mar 14</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 24–25</span><span class="when"><b>Mon, Mar 15</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 26</span><span class="when"><b>Tue, Mar 16</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 27–28</span><span class="when"><b>Wed, Mar 17</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 1–3</span><span class="when"><b>Thu, Mar 18</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 4–5</span><span class="when"><b>Fri, Mar 19</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 6–8</span><span class="when"><b>Sat, Mar 20</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 9–10</span><span class="when"><b>Sun, Mar 21</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 11–13</span><span class="when"><b>Mon, Mar 22</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 14–16</span><span class="when"><b>Tue, Mar 23</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 1–2</span><span class="when"><b>Wed, Mar 24</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 3–5</span><span class="when"><b>Thu, Mar 25</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 6–7</span><span class="when"><b>Fri, Mar 26</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 8–9</span><span class="when"><b>Sat, Mar 27</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 10–11</span><span class="when"><b>Sun, Mar 28</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 12–13</span><span class="when"><b>Mon, Mar 29</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 14–17</span><span class="when"><b>Tue, Mar 30</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 18–19</span><span class="when"><b>Wed, Mar 31</b></span></div></li>
+</ul></section>
+<section class="slot"><h3>April 2027</h3><ul class="items">
+<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 20–22</span><span class="when"><b>Thu, Apr 1</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 23–24</span><span class="when"><b>Fri, Apr 2</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">John 1–3</span><span class="when"><b>Sat, Apr 3</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">John 4–5</span><span class="when"><b>Sun, Apr 4</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">John 6–7</span><span class="when"><b>Mon, Apr 5</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">John 8–9</span><span class="when"><b>Tue, Apr 6</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">John 10–12</span><span class="when"><b>Wed, Apr 7</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">John 13–15</span><span class="when"><b>Thu, Apr 8</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">John 16–18</span><span class="when"><b>Fri, Apr 9</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">John 19–21</span><span class="when"><b>Sat, Apr 10</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 1–3</span><span class="when"><b>Sun, Apr 11</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 4–6</span><span class="when"><b>Mon, Apr 12</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 7–8</span><span class="when"><b>Tue, Apr 13</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 9–11</span><span class="when"><b>Wed, Apr 14</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 12–14</span><span class="when"><b>Thu, Apr 15</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 15–16</span><span class="when"><b>Fri, Apr 16</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 17–19</span><span class="when"><b>Sat, Apr 17</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 20–21</span><span class="when"><b>Sun, Apr 18</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 22–23</span><span class="when"><b>Mon, Apr 19</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 24–26</span><span class="when"><b>Tue, Apr 20</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 27–28</span><span class="when"><b>Wed, Apr 21</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Romans 1–3</span><span class="when"><b>Thu, Apr 22</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Romans 4–7</span><span class="when"><b>Fri, Apr 23</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Romans 8–11</span><span class="when"><b>Sat, Apr 24</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Romans 12–16</span><span class="when"><b>Sun, Apr 25</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Corinthians 1–6</span><span class="when"><b>Mon, Apr 26</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Corinthians 7–10</span><span class="when"><b>Tue, Apr 27</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Corinthians 11–14</span><span class="when"><b>Wed, Apr 28</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Corinthians 15–16</span><span class="when"><b>Thu, Apr 29</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Corinthians 1–6</span><span class="when"><b>Fri, Apr 30</b></span></div></li>
+</ul></section>
+<section class="slot"><h3>May 2027</h3><ul class="items">
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Corinthians 7–10</span><span class="when"><b>Sat, May 1</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Corinthians 11–13</span><span class="when"><b>Sun, May 2</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Galatians 1–6</span><span class="when"><b>Mon, May 3</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Ephesians 1–6</span><span class="when"><b>Tue, May 4</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Philippians 1–4</span><span class="when"><b>Wed, May 5</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Colossians 1–4</span><span class="when"><b>Thu, May 6</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Thessalonians 1–5</span><span class="when"><b>Fri, May 7</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Thessalonians 1–3</span><span class="when"><b>Sat, May 8</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Timothy 1–6</span><span class="when"><b>Sun, May 9</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Timothy 1–4</span><span class="when"><b>Mon, May 10</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Titus &amp; Philemon</span><span class="when"><b>Tue, May 11</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Hebrews 1–6</span><span class="when"><b>Wed, May 12</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Hebrews 7–10</span><span class="when"><b>Thu, May 13</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Hebrews 11–13</span><span class="when"><b>Fri, May 14</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">James 1–5</span><span class="when"><b>Sat, May 15</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 Peter 1–5</span><span class="when"><b>Sun, May 16</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 Peter 1–3</span><span class="when"><b>Mon, May 17</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">1 John 1–5</span><span class="when"><b>Tue, May 18</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">2 John, 3 John &amp; Jude</span><span class="when"><b>Wed, May 19</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Revelation 1–4</span><span class="when"><b>Thu, May 20</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Revelation 5–9</span><span class="when"><b>Fri, May 21</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Revelation 10–14</span><span class="when"><b>Sat, May 22</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Revelation 15–18</span><span class="when"><b>Sun, May 23</b></span></div></li>
+<li class="item"><div class="check" style="cursor:default"><span class="t">Revelation 19–22</span><span class="when"><b>Mon, May 24</b></span></div></li>
+</ul></section></div></main>
+<nav class="tabs" aria-label="Sections">
+  <button type="button" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg>Today</button>
+  <button type="button" data-tab="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z"/><path d="M12 6.5v13"/></svg>Plan</button>
+  <button type="button" data-tab="notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5h10l4 4v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-14a1 1 0 0 1 1-1z"/><path d="M8 11h8M8 15h6"/></svg>Notes</button>
+  <button type="button" data-tab="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18.5" cy="12" r="1.6"/></svg>More</button>
+</nav>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+window.addEventListener("error", function (e) {
+  var b = document.getElementById("err");
+  if (b) { b.hidden = false; b.textContent = "Something went wrong: " + (e && e.message ? e.message : "unknown error") + ". Try closing and reopening the page."; }
+});
+</script>
+<script id="logic">
+/* Pure date and catch-up logic. Days are whole-day numbers (days since 1970-01-01). */
+var DAY_MS = 86400000;
+function dayOf(y, m, d) { return Math.round(Date.UTC(y, m - 1, d) / DAY_MS); }
+function parseISO(s) { var p = s.split("-").map(Number); return dayOf(p[0], p[1], p[2]); }
+function isoOf(n) { return new Date(n * DAY_MS).toISOString().slice(0, 10); }
+/* Reading i is scheduled for startDay + i. While behind, the next `pace` unread readings go on each day;
+   once caught up, one a day on its scheduled date. done: {index: "-" | "YYYY-MM-DD"}. */
+function computePlan(n, startDay, done, T, pace) {
+  var todayISO = isoOf(T);
+  var sched = function (i) { return startDay + i; };
+  var pool = [], checkedToday = [], doneCount = 0, behind = 0, dueStart = 0;
+  for (var i = 0; i < n; i++) {
+    var d = done[i];
+    if (d === undefined) { pool.push(i); if (sched(i) < T) behind++; }
+    else { doneCount++; if (d === todayISO) checkedToday.push(i); }
+    if (sched(i) <= T && (d === undefined || d === todayISO)) dueStart++;
+  }
+  var target = Math.min(pace, dueStart);
+  var planned = new Map();
+  var todayList = checkedToday.slice();
+  var p = 0;
+  var need = Math.max(0, target - checkedToday.length);
+  for (var k = 0; k < need && p < pool.length; k++) { planned.set(pool[p], T); todayList.push(pool[p]); p++; }
+  todayList.sort(function (a, b) { return a - b; });
+  var caughtUp = (p >= pool.length || sched(pool[p]) > T) ? T : null;
+  var day = T;
+  while (p < pool.length) {
+    day++;
+    if (sched(pool[p]) > day) day = sched(pool[p]);
+    var take = 0;
+    while (take < pace && p + take < pool.length && sched(pool[p + take]) <= day) take++;
+    for (var t = 0; t < take; t++) { planned.set(pool[p], day); p++; }
+    if (caughtUp === null && (p >= pool.length || sched(pool[p]) > day)) caughtUp = day;
+  }
+  return {
+    T: T, startDay: startDay, sched: sched, pool: pool, planned: planned, todayList: todayList,
+    caughtUp: caughtUp, behind: behind, doneCount: doneCount, target: target,
+    firstUnread: pool.length ? pool[0] : n, finish: pool.length ? day : null
+  };
+}
+</script>
+
+<script>
+(function(){
+"use strict";
+const PLAN = {"start":"2026-05-26","books":["Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth","1 Samuel","2 Samuel","1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Esther","Job","Psalms","Proverbs","Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations","Ezekiel","Daniel","Hosea","Joel","Amos","Obadiah & Jonah","Micah","Nahum & Habakkuk","Zephaniah & Haggai","Zechariah","Malachi","Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus & Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John, 3 John & Jude","Revelation"],"readings":[[0,"1–3"],[0,"4–7"],[0,"8–11"],[0,"12–15"],[0,"16–18"],[0,"19–22"],[0,"23–24"],[0,"25–27"],[0,"28–30"],[0,"31–32"],[0,"33–34"],[0,"35–37"],[0,"38–40"],[0,"41–42"],[0,"43–45"],[0,"46–48"],[0,"49–50"],[1,"1–4"],[1,"5–7"],[1,"8–10"],[1,"11–13"],[1,"14–15"],[1,"16–18"],[1,"19–21"],[1,"22–25"],[1,"26–28"],[1,"29–30"],[1,"31–33"],[1,"34–35"],[1,"36–38"],[1,"39–40"],[2,"1–4"],[2,"5–7"],[2,"8–10"],[2,"11–13"],[2,"14–15"],[2,"16–18"],[2,"19–21"],[2,"22–23"],[2,"24–25"],[2,"26–27"],[3,"1–3"],[3,"4–6"],[3,"7–9"],[3,"10–12"],[3,"13–15"],[3,"16–18"],[3,"19–21"],[3,"22–24"],[3,"25–27"],[3,"28–30"],[3,"31–32"],[3,"33–36"],[4,"1–2"],[4,"3–4"],[4,"5–7"],[4,"8–10"],[4,"11–13"],[4,"14–16"],[4,"17–19"],[4,"20–22"],[4,"23–26"],[4,"27–28"],[4,"29–31"],[4,"32"],[4,"33–34"],[5,"1–4"],[5,"5–7"],[5,"8–9"],[5,"10–12"],[5,"13–15"],[5,"16–18"],[5,"19–21"],[5,"22–24"],[6,"1–2"],[6,"3–5"],[6,"6–7"],[6,"8–9"],[6,"10–11"],[6,"12–13"],[6,"14–16"],[6,"17–19"],[6,"20–21"],[7,"1–4"],[8,"1–2"],[8,"3–6"],[8,"7–9"],[8,"10–12"],[8,"13–14"],[8,"15–16"],[8,"17–18"],[8,"19–21"],[8,"22–24"],[8,"25–27"],[8,"28–31"],[9,"1–2"],[9,"3–5"],[9,"6–8"],[9,"9–12"],[9,"13–14"],[9,"15–16"],[9,"17–18"],[9,"19–20"],[9,"21–22"],[9,"23–24"],[10,"1–2"],[10,"3–5"],[10,"6–7"],[10,"8"],[10,"9–10"],[10,"11–12"],[10,"13–14"],[10,"15–17"],[10,"18–19"],[10,"20–21"],[10,"22"],[11,"1–3"],[11,"4–5"],[11,"6–8"],[11,"9–10"],[11,"11–13"],[11,"14–15"],[11,"16–17"],[11,"18–19"],[11,"20–22"],[11,"23–25"],[12,"1–2"],[12,"3–5"],[12,"6–7"],[12,"8–10"],[12,"11–12"],[12,"13–15"],[12,"16–17"],[12,"18–20"],[12,"21–23"],[12,"24–26"],[12,"27–29"],[13,"1–3"],[13,"4–6"],[13,"7–9"],[13,"10–14"],[13,"15–18"],[13,"19–22"],[13,"23–25"],[13,"26–28"],[13,"29–30"],[13,"31–33"],[13,"34–36"],[14,"1–3"],[14,"4–7"],[14,"8–10"],[15,"1–3"],[15,"4–6"],[15,"7–8"],[15,"9–10"],[15,"11–13"],[16,"1–4"],[16,"5–10"],[17,"1–5"],[17,"6–9"],[17,"10–14"],[17,"15–18"],[17,"19–20"],[17,"21–24"],[17,"25–29"],[17,"30–31"],[17,"32–34"],[17,"35–38"],[17,"39–42"],[18,"1–8"],[18,"9–16"],[18,"17–19"],[18,"20–25"],[18,"26–31"],[18,"32–35"],[18,"36–38"],[18,"39–42"],[18,"43–47"],[18,"48–52"],[18,"53–58"],[18,"59–64"],[18,"65–68"],[18,"69–72"],[18,"73–77"],[18,"78–79"],[18,"80–86"],[18,"87–90"],[18,"91–96"],[18,"97–103"],[18,"104–105"],[18,"106–108"],[18,"109–115"],[18,"116–119:63"],[18,"119:64–176"],[18,"120–129"],[18,"130–138"],[18,"139–144"],[18,"145–150"],[19,"1–4"],[19,"5–8"],[19,"9–12"],[19,"13–16"],[19,"17–19"],[19,"20–22"],[19,"23–27"],[19,"28–31"],[20,"1–4"],[20,"5–8"],[20,"9–12"],[21,"1–8"],[22,"1–4"],[22,"5–7"],[22,"8–10"],[22,"11–14"],[22,"15–19"],[22,"20–24"],[22,"25–28"],[22,"29–31"],[22,"32–35"],[22,"36–37"],[22,"38–40"],[22,"41–43"],[22,"44–47"],[22,"48–50"],[22,"51–55"],[22,"56–58"],[22,"59–62"],[22,"63–66"],[23,"1–3"],[23,"4–5"],[23,"6–7"],[23,"8–10"],[23,"11–13"],[23,"14–16"],[23,"17–20"],[23,"21–23"],[23,"24–26"],[23,"27–29"],[23,"30–31"],[23,"32–33"],[23,"34–36"],[23,"37–39"],[23,"40–42"],[23,"43–44"],[23,"45–48"],[23,"49–50"],[23,"51–52"],[24,"1–2"],[24,"3–5"],[25,"1–3"],[25,"4–6"],[25,"7–9"],[25,"10–12"],[25,"13–15"],[25,"16"],[25,"17–18"],[25,"19–21"],[25,"22–23"],[25,"24–26"],[25,"27–28"],[25,"29–31"],[25,"32–33"],[25,"34–36"],[25,"37–38"],[25,"39–40"],[25,"41–43"],[25,"44–45"],[25,"46–48"],[26,"1–2"],[26,"3–4"],[26,"5–7"],[26,"8–10"],[26,"11–12"],[27,"1–7"],[27,"8–14"],[28,"1–3"],[29,"1–5"],[29,"6–9"],[30,""],[31,"1–7"],[32,""],[33,""],[34,"1–7"],[34,"8–11"],[34,"12–14"],[35,"1–4"],[36,"1–4"],[36,"5–7"],[36,"8–10"],[36,"11–13"],[36,"14–17"],[36,"18–20"],[36,"21–23"],[36,"24–25"],[36,"26"],[36,"27–28"],[37,"1–3"],[37,"4–5"],[37,"6–8"],[37,"9–10"],[37,"11–13"],[37,"14–16"],[38,"1–2"],[38,"3–5"],[38,"6–7"],[38,"8–9"],[38,"10–11"],[38,"12–13"],[38,"14–17"],[38,"18–19"],[38,"20–22"],[38,"23–24"],[39,"1–3"],[39,"4–5"],[39,"6–7"],[39,"8–9"],[39,"10–12"],[39,"13–15"],[39,"16–18"],[39,"19–21"],[40,"1–3"],[40,"4–6"],[40,"7–8"],[40,"9–11"],[40,"12–14"],[40,"15–16"],[40,"17–19"],[40,"20–21"],[40,"22–23"],[40,"24–26"],[40,"27–28"],[41,"1–3"],[41,"4–7"],[41,"8–11"],[41,"12–16"],[42,"1–6"],[42,"7–10"],[42,"11–14"],[42,"15–16"],[43,"1–6"],[43,"7–10"],[43,"11–13"],[44,"1–6"],[45,"1–6"],[46,"1–4"],[47,"1–4"],[48,"1–5"],[49,"1–3"],[50,"1–6"],[51,"1–4"],[52,""],[53,"1–6"],[53,"7–10"],[53,"11–13"],[54,"1–5"],[55,"1–5"],[56,"1–3"],[57,"1–5"],[58,""],[59,"1–4"],[59,"5–9"],[59,"10–14"],[59,"15–18"],[59,"19–22"]]};
+const LS_KEY = "bible-reading-v2";
+const OLD_KEY = "bible-1yr-progress-v1";      // progress saved by the earlier version of this page
+const DOC_PATH = "reading/main";
+const PACE = 2;                               // catch-up pace: 2 readings a day
+const DEFAULT_PLACE = 117;                    // the spreadsheet's "Current Location": 2 Kings 4–5
+const ISO = /^\d{4}-\d{2}-\d{2}$/;
+let n = 0;
+const uid = () => Date.now().toString(36) + (n++).toString(36) + Math.random().toString(36).slice(2,6);
+const label0 = (i) => { const r = PLAN.readings[i]; return r[1] ? PLAN.books[r[0]] + " " + r[1] : PLAN.books[r[0]]; };
+const okDone = (v) => v === "-" || (typeof v === "string" && ISO.test(v));
+
+function makeDefault(){
+  return { v:2, updatedAt:0, start:PLAN.start, notes:"", dayNotes:{},
+    readings: PLAN.readings.map((r,i)=>({ id:"r"+i, t:label0(i), done: i < DEFAULT_PLACE ? "-" : "" })) };
+}
+
+// ---------------------------------------------------------------- state
+const clone = (o) => JSON.parse(JSON.stringify(o));
+function normalize(s){
+  const d = makeDefault();
+  if(!s || typeof s !== "object") return d;
+  if(typeof s.start !== "string" || !ISO.test(s.start)) s.start = d.start;
+  if(!Array.isArray(s.readings) || !s.readings.length) s.readings = d.readings;
+  s.readings = s.readings.filter(x => x && typeof x === "object")
+    .map(x => ({ id: String(x.id || uid()), t: String(x.t == null ? "" : x.t), done: okDone(x.done) ? x.done : "" }));
+  if(typeof s.notes !== "string") s.notes = "";
+  if(!s.dayNotes || typeof s.dayNotes !== "object" || Array.isArray(s.dayNotes)) s.dayNotes = {};
+  s.v = 2; s.updatedAt = Number(s.updatedAt) || 0;
+  return s;
+}
+function readLocal(){
+  try{
+    const r = localStorage.getItem(LS_KEY);
+    if(r) return JSON.parse(r);
+    const old = localStorage.getItem(OLD_KEY);
+    if(old){
+      const o = JSON.parse(old), s = makeDefault();
+      if(o && o.done && typeof o.done === "object") s.readings.forEach((x,i)=>{ x.done = okDone(o.done[i]) ? o.done[i] : ""; });
+      if(o && typeof o.start === "string" && ISO.test(o.start)) s.start = o.start;
+      s.updatedAt = Number(o && o.updated) || 0;
+      return s;
+    }
+  }catch(e){}
+  return null;
+}
+function writeLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} }
+
+let S = normalize(readLocal());
+const ui = { tab:"today", day:null, edit:false, confirm:null, planScrolled:false, placeSel:null };
+
+const getP = (p) => p.split(".").reduce((o,k)=> o == null ? o : o[k], S);
+function setP(p, v){ const ks = p.split("."); let o = S; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]] == null) o[ks[i]] = {}; o = o[ks[i]]; } o[ks[ks.length-1]] = v; }
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fid = (p) => "f-" + p.replace(/\./g,"-");
+function todayNum(){ const t = new Date(); return dayOf(t.getFullYear(), t.getMonth()+1, t.getDate()); }
+const yearOf = (n) => new Date(n * DAY_MS).getUTCFullYear();
+function fmt(n, o){
+  o = o || {};
+  const opt = { timeZone:"UTC", month: o.long ? "long" : "short", day:"numeric" };
+  if(o.weekday !== false) opt.weekday = o.long ? "long" : "short";
+  if(o.year || yearOf(n) !== yearOf(todayNum())) opt.year = "numeric";
+  return new Date(n * DAY_MS).toLocaleDateString("en-US", opt);
+}
+// "2 Kings 4–5" → book "2 Kings", chapters "4–5"
+const BOOKS_BY_LEN = PLAN.books.slice().sort((x,y)=>y.length-x.length);
+function split(t){
+  const s = String(t).trim();
+  const known = BOOKS_BY_LEN.find(bk => s === bk || s.indexOf(bk + " ") === 0);   // starts with a book name from the plan
+  if(known) return { book:known, ch:s.slice(known.length).trim() };
+  const m = /^(.+?)\s+(\d.*)$/.exec(s);
+  return m ? { book:m[1], ch:m[2] } : { book:s, ch:"" };
+}
+
+// ---------------------------------------------------------------- the plan, worked out from the state
+let P = null;
+function plan(){
+  const T = todayNum(), done = {};
+  S.readings.forEach((x,i)=>{ if(x.done) done[i] = x.done; });
+  const c = computePlan(S.readings.length, parseISO(S.start), done, T, PACE);
+  c.byDay = new Map();
+  c.planned.forEach((d,i)=>{ if(!c.byDay.has(d)) c.byDay.set(d, []); c.byDay.get(d).push(i); });
+  c.readOn = new Map();
+  S.readings.forEach((x,i)=>{ if(x.done && x.done !== "-"){ const d = parseISO(x.done); if(!c.readOn.has(d)) c.readOn.set(d, []); c.readOn.get(d).push(i); } });
+  P = c;
+  return c;
+}
+function dayItems(c, d){
+  if(d === c.T) return c.todayList;
+  if(d < c.T) return (c.readOn.get(d) || []).slice().sort((a,b)=>a-b);
+  return c.byDay.get(d) || [];
+}
+
+// ---------------------------------------------------------------- saving: only on this device (private, no account, no internet)
+const cloud = { ref:null, ok:false, writing:false, retried:false };
+let dirty = false, saveTimer = null, needsRender = false, pendingRemote = null;
+
+function setStatus(s){
+  const el = document.getElementById("status"), tx = document.getElementById("statusText");
+  el.dataset.s = s;
+  tx.textContent = { saving:"Saving…", saved:"Saved", local:"Saved on this phone", connecting:"Connecting…", stale:"Saved here · can't reach the cloud yet" }[s] || s;
+}
+function save(){
+  S.updatedAt = Date.now();
+  writeLocal();
+  dirty = true;
+  if(cloud.ok) setStatus("saving"); else { setStatus("local"); dirty = false; }
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flush, 800);
+}
+async function flush(){
+  if(!dirty || !cloud.ok) return;
+  if(cloud.writing){ clearTimeout(saveTimer); saveTimer = setTimeout(flush, 400); return; }
+  cloud.writing = true; dirty = false;
+  try{
+    await cloud.ref.set({ v:2, updatedAt:S.updatedAt, state:clone(S) });
+    cloud.retried = false;
+    setStatus(dirty ? "saving" : "saved");
+  }catch(e){
+    if(e && e.code === "unavailable" && !cloud.retried){
+      cloud.retried = true; dirty = true;
+      setTimeout(flush, 1200 + Math.random()*1200);
+    } else {
+      cloud.ok = false; setStatus("local");
+    }
+  }finally{
+    cloud.writing = false;
+    if(dirty && cloud.ok){ clearTimeout(saveTimer); saveTimer = setTimeout(flush, 400); }
+  }
+}
+// ---------------------------------------------------------------- rendering
+const ICON_X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+
+function checkRow(c, i, o){
+  const x = S.readings[i], isDone = !!x.done, sched = c.sched(i);
+  if(ui.edit){
+    return `<li class="item"><div class="erow"><input class="txt" id="${fid("readings."+i+".t")}" data-path="readings.${i}.t" value="${esc(x.t)}" aria-label="Reading">
+      ${o.del ? `<button type="button" class="icon" data-act="del" data-i="${i}" aria-label="Delete ${esc(x.t)}">${ICON_X}</button>` : ""}</div></li>`;
+  }
+  const text = o.short ? (split(x.t).ch || x.t) : x.t;
+  let when = "";
+  if(o.dates){
+    if(isDone) when = `<span class="when"><b>Read</b>${x.done !== "-" ? esc(fmt(parseISO(x.done),{weekday:false})) : ""}</span>`;
+    else { const pd = c.planned.get(i); when = `<span class="when"><b>${esc(fmt(pd))}</b>${pd !== sched ? "Sched. " + esc(fmt(sched,{weekday:false})) : ""}</span>`; }
+  }
+  return `<li class="item ${o.main?"main":""}" ${o.anchor?`id="r${i}"`:""}>
+    <label class="check"><input type="checkbox" id="${fid((o.anchor?"p":"d")+".r"+i)}" data-tick="${i}" ${isDone?"checked":""}><span class="box"></span><span class="t">${o.short?`<span class="sr">${esc(split(x.t).book)} </span>`:""}${esc(text)}</span>${when}</label>
+    ${o.sub ? `<span class="tag">${esc(o.sub)}</span>` : ""}</li>`;
+}
+
+function stripHTML(c){
+  const N = S.readings.length;
+  const youPct = c.firstUnread / N * 100;
+  const sIdx = Math.max(0, Math.min(N, c.T - c.startDay));
+  const sPct = sIdx / N * 100;
+  const ntAt = S.readings.findIndex(x => /^Matthew\b/.test(x.t));
+  const place = (pct) => pct < 18 ? "translateX(-7px)" : pct > 82 ? "translateX(calc(-100% + 7px))" : "translateX(-50%)";
+  const youTxt = c.pool.length ? "You’re in " + split(S.readings[c.firstUnread].t).book : "Finished";
+  const sTxt = sIdx >= N ? "Schedule: finished" : "Schedule: " + split(S.readings[sIdx].t).book;
+  return `<div class="strip" role="img" aria-label="${esc(youTxt)}. ${esc(sTxt)}.">
+    <div class="srow above"><span class="slabel you" style="left:${youPct}%;transform:${place(youPct)}">${esc(youTxt)}</span></div>
+    <div class="bar"><div class="fill" style="width:${youPct}%"></div>
+      <div class="gap" style="left:${youPct}%;width:${Math.max(0,sPct-youPct)}%"></div>
+      ${ntAt > 0 ? `<div class="nt" style="left:${ntAt/N*100}%"></div>` : ""}
+      <div class="now" style="left:${sPct}%"></div>
+      ${c.pool.length ? `<div class="ribbon" style="left:${youPct}%"></div>` : ""}</div>
+    <div class="srow below"><span class="slabel sched" style="left:${sPct}%;transform:${place(sPct)}">${esc(sTxt)}</span></div>
+    <div class="ends"><span>Genesis</span><span>Revelation</span></div></div>`;
+}
+
+function statusText(c){
+  if(!c.pool.length) return `<b class="ok">Finished!</b> You’ve read the whole Bible.`;
+  if(c.behind > 0) return c.caughtUp === c.T ? `<b>${c.behind} day${c.behind===1?"":"s"} behind.</b> Finish today’s reading and you’re caught up.`
+    : `<b>${c.behind} day${c.behind===1?"":"s"} behind.</b> At 2 a day you’ll be caught up ${esc(fmt(c.caughtUp))}.`;
+  const ahead = c.sched(c.firstUnread) - c.T - 1;
+  return ahead >= 1 ? `<b class="ok">${ahead} day${ahead===1?"":"s"} ahead.</b> Nice work.` : `<b class="ok">On schedule.</b>`;
+}
+
+function renderToday(c){
+  const T = c.T, d = ui.day == null ? T : ui.day;
+  const chips = [];
+  for(let k=-3; k<=10; k++){
+    const day = T + k, items = dayItems(c, day), done = items.filter(i=>S.readings[i].done).length;
+    const all = items.length && done === items.length;
+    chips.push(`<button type="button" class="chip ${day===T?"today":""} ${all?"alldone":""}" aria-pressed="${day===d}" data-act="day" data-d="${day}" aria-label="${esc(fmt(day,{long:true}))}${day===T?", today":""}">
+      <b>${esc(new Date(day*DAY_MS).toLocaleDateString("en-US",{timeZone:"UTC",weekday:"short"}))}</b><small>${day===T?"Today":all?"✓ Done":esc((new Date(day*DAY_MS).getUTCMonth()+1)+"/"+new Date(day*DAY_MS).getUTCDate())}</small></button>`);
+  }
+  const items = dayItems(c, d), done = items.filter(i=>S.readings[i].done).length;
+  const iso = isoOf(d);
+  const rows = items.map(i => checkRow(c, i, { sub: c.sched(i) !== d ? "Scheduled " + fmt(c.sched(i)) : "On schedule" })).join("");
+  const emptyMsg = d < T ? "Nothing was marked read on this day." : (c.pool.length ? "Nothing due on this day. You’re ahead!" : "You’ve finished the whole plan.");
+  const allDone = items.length && done === items.length && !ui.edit;
+  let next = "";
+  if(allDone && d === T){ const nx = Array.from(c.byDay.keys()).filter(k=>k>T).sort((a,b)=>a-b)[0];
+    if(nx != null) next = `Next: ${c.byDay.get(nx).map(i=>S.readings[i].t).join(" and ")} on ${fmt(nx)}.`; }
+  return `
+  ${ui.edit ? `<div class="editnote">Editing: tap a reading to change its words. Delete or add readings on the Plan tab. Tap <b>Done</b> at the top when you’re finished.</div>` : ""}
+  <div class="days" role="group" aria-label="Choose a day">${chips.join("")}</div>
+  <div class="card">
+    <div class="dayhead"><h2>${esc(fmt(d,{long:true,weekday:true}).split(",")[0])} ${d===T?'<span class="pill">Today</span>':""}</h2><span class="count">${done} of ${items.length} done</span></div>
+    <div class="count">${esc(fmt(d,{long:true, weekday:false}))}</div>
+    <div class="progress" aria-hidden="true"><div style="width:${items.length?Math.round(done/items.length*100):0}%"></div></div>
+    <div class="statusline">${statusText(c)}</div>
+  </div>
+  <section class="slot" aria-label="Readings"><h3>${d===T?"Today’s reading":d<T?"Read this day":"Reading"}</h3>
+    ${items.length ? `<ul class="items">${rows}</ul>` : `<p class="hint empty">${emptyMsg}</p>`}
+    ${allDone ? `<div class="done-note">All done for ${d===T?"today":"this day"}!${next?`<br><span class="hint" style="color:inherit;font-weight:500">${esc(next)}</span>`:""}</div>` : ""}
+  </section>
+  <section class="slot" aria-label="Notes for this day"><h3>My notes <small>· ${esc(fmt(d))}</small></h3>
+    <textarea class="notearea" id="${fid("dayNotes."+iso)}" data-path="dayNotes.${iso}" placeholder="Thoughts, favorite verses, questions…">${esc(S.dayNotes[iso] || "")}</textarea>
+  </section>
+  <div class="card">
+    <h2>Your place in the Bible</h2>
+    ${stripHTML(c)}
+    <div class="stats">
+      <div>Read<b>${c.doneCount} of ${S.readings.length}</b></div>
+      <div>Caught up<b>${!c.pool.length ? "Done" : c.behind > 0 ? esc(fmt(c.caughtUp,{weekday:false})) : "Yes"}</b></div>
+      <div>Finish<b>${c.finish == null ? "Done" : esc(fmt(c.finish,{weekday:false}))}</b></div>
+    </div>
+  </div>`;
+}
+
+function renderPlan(c){
+  const today = new Set(c.todayList);
+  const groups = [];
+  S.readings.forEach((x,i)=>{ const b = split(x.t).book; const g = groups[groups.length-1];
+    if(g && g.book === b) g.idx.push(i); else groups.push({ book:b, idx:[i] }); });
+  const secs = groups.map(g=>{
+    const done = g.idx.filter(i=>S.readings[i].done).length;
+    return `<section class="slot"><h3>${esc(g.book)} <small>· ${done} of ${g.idx.length}</small></h3><ul class="items">
+      ${g.idx.map(i=>checkRow(c, i, { short:true, dates:true, anchor:true, main: today.has(i), del:true })).join("")}</ul>
+      ${ui.edit ? `<button type="button" class="add" data-act="addReading" data-after="${g.idx[g.idx.length-1]}" data-book="${esc(g.book)}">+ Add a reading to ${esc(g.book)}</button>` : ""}</section>`;
+  }).join("");
+  return `
+  ${ui.edit ? `<div class="editnote">Editing: change the words of any reading, delete it, or add a new one. Each reading is one day on the schedule, so adding or deleting moves later dates. Tap <b>Done</b> when finished.</div>` : ""}
+  <div class="card">
+    <h2>The whole plan</h2>
+    <p class="hint">Tap a box when you’ve read it. The bold date is your day to read it at 2 a day until you’re caught up. When that’s different from the original schedule, the original date is underneath.</p>
+    <button type="button" class="btn ghost" style="width:100%" data-act="jump">Go to today</button>
+  </div>
+  ${secs}`;
+}
+
+function renderNotes(){
+  const list = Object.keys(S.dayNotes).filter(k => ISO.test(k) && String(S.dayNotes[k]).trim()).sort().reverse();
+  return `
+  <section class="card"><h2>My notes</h2>
+    <p class="hint">For anything: goals, questions to look up, verses to remember.</p>
+    <textarea class="txt" style="width:100%;min-height:150px" id="f-notes" data-path="notes" aria-label="My notes" placeholder="Write anything here…">${esc(S.notes)}</textarea></section>
+  <section class="card"><h2>Notes by day</h2>
+    ${list.length ? list.map(k=>`<div class="dnote"><button type="button" data-act="gotoDay" data-d="${parseISO(k)}">${esc(fmt(parseISO(k),{year:true}))}</button><p>${esc(S.dayNotes[k])}</p></div>`).join("")
+      : `<p class="hint">Notes you write on the Today tab show up here.</p>`}
+  </section>`;
+}
+
+let placeMsg = "", backupMsg = { t:"", bad:false };
+function renderMore(c){
+  const sel = ui.placeSel == null ? c.firstUnread : ui.placeSel;
+  const opts = S.readings.map((x,i)=>`<option value="${i}" ${i===sel?"selected":""}>${esc(x.t)}</option>`).join("")
+    + `<option value="${S.readings.length}" ${sel>=S.readings.length?"selected":""}>I’ve finished the whole plan</option>`;
+  return `
+  <section class="card"><h2>Where you are</h2>
+    <div class="field"><label for="f-place">Next reading to read</label><select id="f-place">${opts}</select></div>
+    <p class="hint" style="margin:8px 0 10px">Marks every reading before it as read, and that reading and everything after it as not read yet.</p>
+    <button type="button" class="btn ${ui.confirm==="place"?"warn":"ghost"}" style="width:100%" data-act="place">${ui.confirm==="place"?"Tap again to set your place":"Set my place"}</button>
+  </section>
+  <section class="card"><h2>Start date</h2>
+    <div class="field"><label for="f-start">Bethel start date</label><input type="date" id="f-start" data-path="start" value="${esc(S.start)}"></div>
+    <p class="hint" style="margin:8px 0 0">The schedule runs one reading a day from this date. Catch-up is 2 readings a day.</p>
+  </section>
+  <section class="card"><h2>Keep it on your phone</h2>
+    <p class="hint">Do this once, from this page in your phone’s web browser:</p>
+    <p style="margin:6px 0 0"><b>iPhone (Safari)</b></p>
+    <ol class="steps"><li>Tap the <b>Share</b> button (square with an arrow).</li><li>Tap <b>Add to Home Screen</b>, then <b>Add</b>.</li><li>From now on, open it from the Home Screen icon. That’s where your progress is kept.</li></ol>
+    <p style="margin:8px 0 0"><b>Android (Chrome)</b></p>
+    <ol class="steps"><li>Tap the <b>⋮</b> menu.</li><li>Tap <b>Add to Home screen</b> (or <b>Install app</b>).</li></ol>
+  </section>
+  <section class="card"><h2>Backup</h2>
+    <p class="hint">Your progress is saved only on this phone, in the browser you open this file with. Copy a backup code now and then and keep it in a note or a text to yourself. If your progress ever goes missing, paste it here to get it all back.</p>
+    <div class="btns" style="margin-top:10px">
+      <button type="button" class="btn" data-act="copyBackup">Copy backup code</button>
+      <button type="button" class="btn ghost" data-act="restore">Restore from code</button>
+    </div>
+    <div class="field" style="margin-top:10px"><label for="f-backup">Backup code</label><textarea id="f-backup" spellcheck="false" autocomplete="off" placeholder="Paste a backup code here, then tap Restore from code." style="min-height:80px;font:13px/1.4 ui-monospace,Menlo,monospace"></textarea></div>
+    ${backupMsg.t ? `<p class="msgline ${backupMsg.bad?"bad":""}" role="status">${esc(backupMsg.t)}</p>` : ""}
+  </section>
+  <section class="card"><h2>Clear all checkmarks</h2>
+    <p class="hint">Unticks every reading, including the ones read before. Your notes and any changes to the readings stay.</p>
+    <button type="button" class="btn ${ui.confirm==="clear"?"warn":"ghost"}" style="width:100%" data-act="clearAll">${ui.confirm==="clear"?"Tap again to clear every checkmark":"Clear all checkmarks"}</button>
+  </section>`;
+}
+
+function render(){
+  needsRender = false;
+  const c = plan();
+  const eb = document.getElementById("editBtn");
+  eb.textContent = ui.edit ? "Done" : "Edit"; eb.setAttribute("aria-pressed", String(ui.edit));
+  eb.hidden = ui.tab === "notes" || ui.tab === "more";
+  document.getElementById("behind").textContent = !c.pool.length ? "Finished!" : c.behind > 0 ? `${c.behind} day${c.behind===1?"":"s"} behind` : "On schedule";
+  document.querySelectorAll("nav.tabs button").forEach(a=>{ if(a.dataset.tab===ui.tab) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+  const v = document.getElementById("view");
+  const focusId = document.activeElement && document.activeElement.id;
+  v.innerHTML = ui.tab==="plan" ? renderPlan(c) : ui.tab==="notes" ? renderNotes() : ui.tab==="more" ? renderMore(c) : renderToday(c);
+  if(focusId && /^f-[dp]-r\d+$/.test(focusId)){ const f = document.getElementById(focusId); if(f) f.focus({ preventScroll:true }); }
+}
+
+// ---------------------------------------------------------------- interaction
+function isTyping(){
+  const el = document.activeElement;
+  return !!el && (el.tagName==="TEXTAREA" && !el.readOnly || (el.tagName==="INPUT" && !["checkbox","radio","button","submit","date"].includes(el.type)));
+}
+function maybeRender(){
+  setTimeout(()=>{
+    if(isTyping()) return;
+    if(pendingRemote){ S = pendingRemote; pendingRemote = null; writeLocal(); needsRender = true; }
+    if(needsRender) render();
+  }, 60);
+}
+let toastT = null;
+function toast(msg){ const t = document.getElementById("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(()=>{ t.hidden = true; }, 2600); }
+function go(tab){
+  ui.tab = tab; ui.confirm = null; if(tab !== "today") ui.edit = ui.edit && tab === "plan";
+  if(location.hash.replace("#","") !== tab){ try{ history.replaceState(null, "", "#" + tab); }catch(e){} }
+  render(); document.getElementById("main").scrollTop = 0;
+  if(tab === "today") centerChip();
+  if(tab === "plan" && !ui.planScrolled){ ui.planScrolled = true; jumpToday(false); }
+}
+function centerChip(){ setTimeout(()=>{ const ch = document.querySelector('.chip[aria-pressed="true"]'); if(ch && ch.scrollIntoView) ch.scrollIntoView({inline:"center", block:"nearest"}); }, 0); }
+function jumpToday(smooth){
+  const c = P || plan();
+  let target = c.todayList.find(i => !S.readings[i].done);
+  if(target === undefined) target = c.todayList.length ? c.todayList[0] : Math.min(c.firstUnread, S.readings.length-1);
+  const el = document.getElementById("r" + target);
+  if(el) el.scrollIntoView({ block:"center", behavior: smooth ? "smooth" : "auto" });
+}
+
+// backup codes: start date, notes, which readings are read, and any edited reading names
+function encodeBackup(){
+  const runs = []; let cur = null;
+  S.readings.forEach((x,i)=>{ const v = x.done ? (x.done === "-" ? 0 : x.done) : null;
+    if(v === null){ cur = null; return; }
+    if(cur && cur[2] === v && cur[1] === i-1) cur[1] = i; else { cur = [i,i,v]; runs.push(cur); } });
+  const def = makeDefault().readings, same = S.readings.length === def.length && S.readings.every((x,i)=>x.t === def[i].t);
+  const body = { v:2, s:S.start, r:runs, n:S.notes, dn:S.dayNotes, t: same ? null : S.readings.map(x=>x.t) };
+  return "BR2." + btoa(unescape(encodeURIComponent(JSON.stringify(body))));
+}
+function decodeBackup(code){
+  const raw = String(code).trim(), body = raw.replace(/^BR[12]\./, "").replace(/\s+/g, "");
+  const o = JSON.parse(decodeURIComponent(escape(atob(body))));
+  const s = makeDefault();
+  if(Array.isArray(o.t)) s.readings = o.t.map((t,i)=>({ id:uid(), t:String(t), done:"" }));
+  s.readings.forEach(x=>{ x.done = ""; });
+  (o.r || []).forEach(run=>{ for(let i=run[0]; i<=run[1] && i<s.readings.length; i++) s.readings[i].done = run[2] === 0 ? "-" : run[2]; });
+  if(typeof o.s === "string") s.start = o.s;
+  if(typeof o.n === "string") s.notes = o.n;
+  if(o.dn && typeof o.dn === "object") s.dayNotes = o.dn;
+  const out = normalize(s);
+  if(!out.readings.length) throw new Error("empty");
+  return out;
+}
+
+document.addEventListener("click", (e)=>{
+  const tb = e.target.closest("nav.tabs [data-tab]");
+  if(tb){ e.preventDefault(); if(tb.dataset.tab === "plan" && ui.tab === "plan") jumpToday(true); else go(tb.dataset.tab); return; }
+  const b = e.target.closest("[data-act]"); if(!b) return;
+  const act = b.dataset.act;
+  if(act !== "place" && act !== "clearAll") ui.confirm = null;
+  switch(act){
+    case "edit": ui.edit = !ui.edit; render(); return;
+    case "day": ui.day = +b.dataset.d; render(); centerChip(); return;
+    case "gotoDay": ui.day = +b.dataset.d; go("today"); return;
+    case "jump": jumpToday(true); return;
+    case "del": { const i = +b.dataset.i; const t = S.readings[i] && S.readings[i].t;
+      S.readings.splice(i,1); save(); render(); toast(`Deleted ${t}`); return; }
+    case "addReading": { const after = +b.dataset.after; S.readings.splice(after+1, 0, { id:uid(), t:b.dataset.book + " ", done:"" });
+      save(); render(); const inp = document.getElementById(fid("readings."+(after+1)+".t")); if(inp){ inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); } return; }
+    case "place": {
+      if(ui.confirm !== "place"){ ui.confirm = "place"; render(); return; }
+      ui.confirm = null;
+      const k = ui.placeSel == null ? +document.getElementById("f-place").value : ui.placeSel;
+      ui.placeSel = null;
+      S.readings.forEach((x,i)=>{ if(i < k){ if(!x.done) x.done = "-"; } else x.done = ""; });
+      save(); render(); toast(k < S.readings.length ? `Your place: ${S.readings[k].t}` : "Marked the whole plan as read"); return; }
+    case "clearAll": {
+      if(ui.confirm !== "clear"){ ui.confirm = "clear"; render(); return; }
+      ui.confirm = null; S.readings.forEach(x=>{ x.done = ""; }); save(); render(); toast("All checkmarks cleared"); return; }
+    case "copyBackup": {
+      const code = encodeBackup(), ta = document.getElementById("f-backup");
+      if(ta) ta.value = code;
+      const fallback = ()=>{ if(ta){ ta.focus(); ta.select(); ta.setSelectionRange(0, code.length); } backupMsg = { t:"Press and hold the code above, then tap Copy.", bad:false }; showBackupMsg(); };
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(()=>{ backupMsg = { t:"Copied. Paste it into a note or a text to yourself.", bad:false }; showBackupMsg(); }, fallback);
+        else fallback();
+      }catch(err){ fallback(); }
+      return; }
+    case "restore": {
+      const ta = document.getElementById("f-backup");
+      try{ const s = decodeBackup(ta ? ta.value : ""); s.updatedAt = Date.now(); S = s; save(); backupMsg = { t:"Progress restored.", bad:false }; render(); toast("Progress restored"); }
+      catch(err){ backupMsg = { t:"That code didn’t work. Copy the whole code, starting with BR, and try again.", bad:true }; showBackupMsg(); }
+      return; }
+  }
+});
+function showBackupMsg(){
+  const card = document.getElementById("f-backup"); if(!card) return;
+  let p = card.closest(".card").querySelector(".msgline");
+  if(!p){ p = document.createElement("p"); p.setAttribute("role","status"); card.closest(".card").appendChild(p); }
+  p.className = "msgline" + (backupMsg.bad ? " bad" : ""); p.textContent = backupMsg.t;
+}
+
+document.addEventListener("change", (e)=>{
+  const el = e.target;
+  if(el.dataset.tick != null){
+    const i = +el.dataset.tick; if(!S.readings[i]) return;
+    S.readings[i].done = el.checked ? isoOf(todayNum()) : "";
+    save(); render(); return;
+  }
+  if(el.id === "f-place"){ ui.placeSel = +el.value; if(ui.confirm){ ui.confirm = null; render(); } return; }
+  const p = el.dataset.path; if(!p) return;
+  if(p === "start"){ if(ISO.test(el.value) && el.value !== S.start){ S.start = el.value; save(); render(); toast("Start date changed"); } return; }
+  needsRender = true; maybeRender();
+});
+
+document.addEventListener("input", (e)=>{
+  const el = e.target, p = el.dataset.path;
+  if(!p || el.type === "checkbox" || el.type === "date" || el.tagName === "SELECT") return;
+  setP(p, el.value);
+  if(p.indexOf("dayNotes.") === 0 && !el.value.trim()) delete S.dayNotes[p.slice(9)];
+  save();
+  needsRender = true;
+});
+document.addEventListener("focusout", maybeRender);
+
+function fromHash(){
+  const h = (location.hash||"").replace("#","");
+  ui.tab = ["today","plan","notes","more"].includes(h) ? h : "today";
+  ui.confirm = null;
+  render();
+  if(ui.tab === "today") centerChip();
+  if(ui.tab === "plan" && !ui.planScrolled){ ui.planScrolled = true; setTimeout(()=>jumpToday(false), 0); }
+}
+window.addEventListener("hashchange", ()=>{ fromHash(); document.getElementById("main").scrollTop = 0; });
+
+// a new day while the page stays open
+let lastT = todayNum();
+function checkDay(){ const t = todayNum(); if(t !== lastT){ lastT = t; ui.day = null; if(!isTyping()) render(); } }
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) checkDay(); });
+setInterval(checkDay, 60000);
+
+fromHash();
+setStatus("local");
+try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{}); }catch(e){}
+if("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")){
+  window.addEventListener("load", ()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); });
+}
+})();
+</script>
+</body>
+</html>
