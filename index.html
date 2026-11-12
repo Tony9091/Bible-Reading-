@@ -815,7 +815,7 @@ let toastT = null;
 function toast(msg){ const t = document.getElementById("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(()=>{ t.hidden = true; }, 2600); }
 // ---------------------------------------------------------------- guided tour
 const TOUR = [
-  { title:"Welcome to your reading plan", text:"Here’s a quick tour of how everything works. It takes about a minute." },
+  { title:"Your plan is ready", text:"Here’s a quick look at how to use it each day. It takes about a minute." },
   { tab:"today", sel:'#view section[aria-label="Readings"]', title:"Tick off each reading",
     text:"Tap the box when you’ve read it. Tap “Read on wol.jw.org” to open that chapter of the Bible." },
   { tab:"today", sel:"#view .days", title:"Pick a day",
@@ -832,30 +832,50 @@ const TOUR = [
     text:"In More you can switch to another reading plan or a slower pace, set where you are, change your start date, and copy a backup code." },
   { title:"Keep your progress safe", text:"Your progress is saved only on this phone. Copy a backup code from More now and then, and keep it in a note or a text to yourself. On iPhone, always open the app from its Home Screen icon." },
 ];
-let tourI = -1, tourTarget = null;
+const fieldOf = (id) => () => { const el = document.getElementById(id); return el ? el.closest(".field") : null; };
+const TOUR_SETUP = [
+  { title:"Welcome!", text:"This app helps you read the whole Bible, a little each day. There’s no sign-in or password: everything you do is saved on this phone. Here’s how to get started." },
+  { sel:fieldOf("w-plan"), title:"Choose how to read",
+    text:"“In order (Genesis to Revelation)” is the one-year plan. You can also read in the order the books were written, a different section each day, or one theme at a time." },
+  { sel:fieldOf("w-pace"), title:"Choose your pace",
+    text:"One reading a day finishes the whole Bible in a year. Pick every 2 or 3 days for a gentler pace." },
+  { sel:fieldOf("w-start"), title:"Your start date",
+    text:"Leave it as today if you’re starting now. Already reading? Pick the day you started, and the app works out where you should be." },
+  { sel:fieldOf("w-place"), title:"Your next reading",
+    text:"New to the plan? Leave it on the first reading. Otherwise pick the first reading you haven’t read yet. Everything before it is marked as read." },
+  { sel:'[data-act="begin"]', title:"Start your plan",
+    text:"Tap Start my plan when you’re ready. Then the tour shows you how to tick off readings, catch up, write notes and more." },
+];
+let tourI = -1, tourTarget = null, tourSteps = TOUR;
 function startTour(){
-  if(!S.setup) return;
+  tourSteps = S.setup ? TOUR : TOUR_SETUP;
   ui.edit = false; ui.confirm = null; tourI = 0;
   document.getElementById("tour").hidden = false;
   showTourStep();
 }
-function endTour(){
+function endTour(skipped){
+  const setupPart = tourSteps === TOUR_SETUP;
   tourI = -1; tourTarget = null;
   document.getElementById("tour").hidden = true;
+  if(setupPart && !skipped){                       // the daily how-to continues after Start my plan
+    const b = document.querySelector('[data-act="begin"]'); if(b){ b.scrollIntoView({ block:"center" }); try{ b.focus({ preventScroll:true }); }catch(e){} }
+    return;
+  }
   if(!S.tourSeen){ S.tourSeen = true; save(); }
   go("today");
 }
 function showTourStep(){
-  const st = TOUR[tourI];
+  const st = tourSteps[tourI];
   if(st.tab && ui.tab !== st.tab) go(st.tab);
-  document.getElementById("tour-step").textContent = "Step " + (tourI + 1) + " of " + TOUR.length;
+  document.getElementById("tour-step").textContent = (tourSteps === TOUR_SETUP ? "Getting started · " : "") + "Step " + (tourI + 1) + " of " + tourSteps.length;
   document.getElementById("tour-title").textContent = st.title;
   document.getElementById("tour-text").textContent = st.text;
-  document.getElementById("tour-dots").innerHTML = TOUR.map((_,k)=>`<i class="${k===tourI?"on":""}"></i>`).join("");
+  document.getElementById("tour-dots").innerHTML = tourSteps.map((_,k)=>`<i class="${k===tourI?"on":""}"></i>`).join("");
   document.querySelector('[data-tour="back"]').hidden = tourI === 0;
   const next = document.getElementById("tour-next");
-  next.textContent = tourI === TOUR.length - 1 ? "Done" : tourI === 0 ? "Start the tour" : "Next";
-  tourTarget = st.sel ? document.querySelector(st.sel) : null;
+  const lastStep = tourI === tourSteps.length - 1;
+  next.textContent = lastStep ? (tourSteps === TOUR_SETUP ? "Got it" : "Done") : tourI === 0 ? "Show me" : "Next";
+  tourTarget = typeof st.sel === "function" ? st.sel() : st.sel ? document.querySelector(st.sel) : null;
   if(tourTarget && tourTarget.closest("main")) tourTarget.scrollIntoView({ block:"center" });
   placeSpot(); requestAnimationFrame(placeSpot); setTimeout(placeSpot, 150);
   try{ next.focus({ preventScroll:true }); }catch(e){}
@@ -875,14 +895,14 @@ document.addEventListener("click", (e)=>{
   const b = e.target.closest("[data-tour]"); if(!b || tourI < 0) return;
   e.stopPropagation();
   const a = b.dataset.tour;
-  if(a === "skip") return endTour();
+  if(a === "skip") return endTour(true);
   if(a === "back"){ tourI = Math.max(0, tourI - 1); return showTourStep(); }
-  if(tourI >= TOUR.length - 1) return endTour();
+  if(tourI >= tourSteps.length - 1) return endTour(false);
   tourI++; showTourStep();
 }, true);
 document.addEventListener("keydown", (e)=>{
   if(tourI < 0) return;
-  if(e.key === "Escape"){ e.preventDefault(); endTour(); }
+  if(e.key === "Escape"){ e.preventDefault(); endTour(true); }
   else if(e.key === "ArrowRight"){ e.preventDefault(); document.getElementById("tour-next").click(); }
   else if(e.key === "ArrowLeft" && tourI > 0){ e.preventDefault(); document.querySelector('[data-tour="back"]').click(); }
   else if(e.key === "Tab"){   // keep keyboard focus inside the tour card
@@ -1073,7 +1093,7 @@ document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) checkDa
 setInterval(checkDay, 60000);
 
 fromHash();
-if(S.setup && !S.tourSeen) setTimeout(startTour, 500);
+if(!S.tourSeen) setTimeout(startTour, 500);
 setStatus("local");
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{}); }catch(e){}
 if("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")){
