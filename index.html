@@ -117,6 +117,11 @@ ul.items{list-style:none;margin:0;padding:4px 0}
 .when b{display:block;color:var(--ink);font-size:14px}
 .item.main .when b{color:var(--accent)}
 .tag{display:block;margin:-6px 0 6px 38px;font-size:12px;font-weight:600;color:var(--accent)}
+.tag a{color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.plandesc{margin:6px 0 0;font-size:14px;color:var(--muted)}
+.srcs{margin:6px 0 0;padding-left:18px;font-size:14px}
+.srcs li{margin:4px 0}
+.srcs a{color:var(--accent)}
 .empty{padding:14px;margin:0;text-align:center}
 .done-note{margin:4px 12px 10px;padding:10px 12px;border-radius:10px;background:var(--good-soft);color:var(--good);font-weight:700;text-align:center}
 
@@ -181,228 +186,16 @@ nav.tabs button[aria-current="page"]{color:var(--accent);background:var(--soft)}
 <body>
 <header class="top">
   <div class="wrap">
-    <div class="row1"><span>Catch-up plan · 2 a day</span><span class="status" id="status" data-s="local" role="status"><i></i><span id="statusText">Saved on this phone</span></span></div>
+    <div class="row1"><span>Your Bible reading · catch up at 2 a day</span><span class="status" id="status" data-s="local" role="status"><i></i><span id="statusText">Saved on this phone</span></span></div>
     <h1>Bible Reading in 1 Year</h1>
     <div class="row3">
-      <span class="behind" id="behind">2 readings a day</span>
+      <span class="behind" id="behind">Bible reading</span>
       <button class="editbtn" id="editBtn" type="button" aria-pressed="false" data-act="edit">Edit</button>
     </div>
   </div>
 </header>
 <p class="err" id="err" role="alert" hidden></p>
-<main id="main"><div class="wrap stack" id="view"><div class="card"><h2>Your catch-up plan</h2>
-<p>Read 2 a day starting Wed, Nov 11 and you’re caught up Fri, Jan 1, 2027. Then one a day until Mon, May 24, 2027.</p>
-<p class="hint" style="margin:0">If the tick boxes don’t appear, close this page and open it again.</p></div>
-<section class="slot"><h3>November 2026</h3><ul class="items">
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Kings 4–8</span><span class="when"><b>Wed, Nov 11</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Kings 9–13</span><span class="when"><b>Thu, Nov 12</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Kings 14–17</span><span class="when"><b>Fri, Nov 13</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Kings 18–22</span><span class="when"><b>Sat, Nov 14</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Kings 23–25 · 1 Chronicles 1–2</span><span class="when"><b>Sun, Nov 15</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Chronicles 3–7</span><span class="when"><b>Mon, Nov 16</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Chronicles 8–12</span><span class="when"><b>Tue, Nov 17</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Chronicles 13–17</span><span class="when"><b>Wed, Nov 18</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Chronicles 18–23</span><span class="when"><b>Thu, Nov 19</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Chronicles 24–29</span><span class="when"><b>Fri, Nov 20</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 1–6</span><span class="when"><b>Sat, Nov 21</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 7–14</span><span class="when"><b>Sun, Nov 22</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 15–22</span><span class="when"><b>Mon, Nov 23</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 23–28</span><span class="when"><b>Tue, Nov 24</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 29–33</span><span class="when"><b>Wed, Nov 25</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Chronicles 34–36 · Ezra 1–3</span><span class="when"><b>Thu, Nov 26</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezra 4–10</span><span class="when"><b>Fri, Nov 27</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Nehemiah 1–6</span><span class="when"><b>Sat, Nov 28</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Nehemiah 7–10</span><span class="when"><b>Sun, Nov 29</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Nehemiah 11–13 · Esther 1–4</span><span class="when"><b>Mon, Nov 30</b></span></div></li>
-</ul></section>
-<section class="slot"><h3>December 2026</h3><ul class="items">
-<li class="item"><div class="check" style="cursor:default"><span class="t">Esther 5–10 · Job 1–5</span><span class="when"><b>Tue, Dec 1</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Job 6–14</span><span class="when"><b>Wed, Dec 2</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Job 15–20</span><span class="when"><b>Thu, Dec 3</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Job 21–29</span><span class="when"><b>Fri, Dec 4</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Job 30–34</span><span class="when"><b>Sat, Dec 5</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Job 35–42</span><span class="when"><b>Sun, Dec 6</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 1–16</span><span class="when"><b>Mon, Dec 7</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 17–25</span><span class="when"><b>Tue, Dec 8</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 26–35</span><span class="when"><b>Wed, Dec 9</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 36–42</span><span class="when"><b>Thu, Dec 10</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 43–52</span><span class="when"><b>Fri, Dec 11</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 53–64</span><span class="when"><b>Sat, Dec 12</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 65–72</span><span class="when"><b>Sun, Dec 13</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 73–79</span><span class="when"><b>Mon, Dec 14</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 80–90</span><span class="when"><b>Tue, Dec 15</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 91–103</span><span class="when"><b>Wed, Dec 16</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 104–108</span><span class="when"><b>Thu, Dec 17</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 109–119:63</span><span class="when"><b>Fri, Dec 18</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 119:64–129</span><span class="when"><b>Sat, Dec 19</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 130–144</span><span class="when"><b>Sun, Dec 20</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Psalms 145–150 · Proverbs 1–4</span><span class="when"><b>Mon, Dec 21</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Proverbs 5–12</span><span class="when"><b>Tue, Dec 22</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Proverbs 13–19</span><span class="when"><b>Wed, Dec 23</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Proverbs 20–27</span><span class="when"><b>Thu, Dec 24</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Proverbs 28–31 · Ecclesiastes 1–4</span><span class="when"><b>Fri, Dec 25</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ecclesiastes 5–12</span><span class="when"><b>Sat, Dec 26</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Song of Solomon 1–8 · Isaiah 1–4</span><span class="when"><b>Sun, Dec 27</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 5–10</span><span class="when"><b>Mon, Dec 28</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 11–19</span><span class="when"><b>Tue, Dec 29</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 20–28</span><span class="when"><b>Wed, Dec 30</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 29–35</span><span class="when"><b>Thu, Dec 31</b></span></div></li>
-</ul></section>
-<section class="slot"><h3>January 2027</h3><ul class="items">
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 36–40</span><span class="when"><b>Fri, Jan 1</b></span></div></li>
-<li class="item"><div class="done-note" style="margin:8px 0">Caught up! From here, one reading a day.</div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 41–43</span><span class="when"><b>Sat, Jan 2</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 44–47</span><span class="when"><b>Sun, Jan 3</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 48–50</span><span class="when"><b>Mon, Jan 4</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 51–55</span><span class="when"><b>Tue, Jan 5</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 56–58</span><span class="when"><b>Wed, Jan 6</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 59–62</span><span class="when"><b>Thu, Jan 7</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Isaiah 63–66</span><span class="when"><b>Fri, Jan 8</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 1–3</span><span class="when"><b>Sat, Jan 9</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 4–5</span><span class="when"><b>Sun, Jan 10</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 6–7</span><span class="when"><b>Mon, Jan 11</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 8–10</span><span class="when"><b>Tue, Jan 12</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 11–13</span><span class="when"><b>Wed, Jan 13</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 14–16</span><span class="when"><b>Thu, Jan 14</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 17–20</span><span class="when"><b>Fri, Jan 15</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 21–23</span><span class="when"><b>Sat, Jan 16</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 24–26</span><span class="when"><b>Sun, Jan 17</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 27–29</span><span class="when"><b>Mon, Jan 18</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 30–31</span><span class="when"><b>Tue, Jan 19</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 32–33</span><span class="when"><b>Wed, Jan 20</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 34–36</span><span class="when"><b>Thu, Jan 21</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 37–39</span><span class="when"><b>Fri, Jan 22</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 40–42</span><span class="when"><b>Sat, Jan 23</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 43–44</span><span class="when"><b>Sun, Jan 24</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 45–48</span><span class="when"><b>Mon, Jan 25</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 49–50</span><span class="when"><b>Tue, Jan 26</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Jeremiah 51–52</span><span class="when"><b>Wed, Jan 27</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Lamentations 1–2</span><span class="when"><b>Thu, Jan 28</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Lamentations 3–5</span><span class="when"><b>Fri, Jan 29</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 1–3</span><span class="when"><b>Sat, Jan 30</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 4–6</span><span class="when"><b>Sun, Jan 31</b></span></div></li>
-</ul></section>
-<section class="slot"><h3>February 2027</h3><ul class="items">
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 7–9</span><span class="when"><b>Mon, Feb 1</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 10–12</span><span class="when"><b>Tue, Feb 2</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 13–15</span><span class="when"><b>Wed, Feb 3</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 16</span><span class="when"><b>Thu, Feb 4</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 17–18</span><span class="when"><b>Fri, Feb 5</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 19–21</span><span class="when"><b>Sat, Feb 6</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 22–23</span><span class="when"><b>Sun, Feb 7</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 24–26</span><span class="when"><b>Mon, Feb 8</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 27–28</span><span class="when"><b>Tue, Feb 9</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 29–31</span><span class="when"><b>Wed, Feb 10</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 32–33</span><span class="when"><b>Thu, Feb 11</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 34–36</span><span class="when"><b>Fri, Feb 12</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 37–38</span><span class="when"><b>Sat, Feb 13</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 39–40</span><span class="when"><b>Sun, Feb 14</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 41–43</span><span class="when"><b>Mon, Feb 15</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 44–45</span><span class="when"><b>Tue, Feb 16</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ezekiel 46–48</span><span class="when"><b>Wed, Feb 17</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Daniel 1–2</span><span class="when"><b>Thu, Feb 18</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Daniel 3–4</span><span class="when"><b>Fri, Feb 19</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Daniel 5–7</span><span class="when"><b>Sat, Feb 20</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Daniel 8–10</span><span class="when"><b>Sun, Feb 21</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Daniel 11–12</span><span class="when"><b>Mon, Feb 22</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Hosea 1–7</span><span class="when"><b>Tue, Feb 23</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Hosea 8–14</span><span class="when"><b>Wed, Feb 24</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Joel 1–3</span><span class="when"><b>Thu, Feb 25</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Amos 1–5</span><span class="when"><b>Fri, Feb 26</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Amos 6–9</span><span class="when"><b>Sat, Feb 27</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Obadiah &amp; Jonah</span><span class="when"><b>Sun, Feb 28</b></span></div></li>
-</ul></section>
-<section class="slot"><h3>March 2027</h3><ul class="items">
-<li class="item"><div class="check" style="cursor:default"><span class="t">Micah 1–7</span><span class="when"><b>Mon, Mar 1</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Nahum &amp; Habakkuk</span><span class="when"><b>Tue, Mar 2</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Zephaniah &amp; Haggai</span><span class="when"><b>Wed, Mar 3</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Zechariah 1–7</span><span class="when"><b>Thu, Mar 4</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Zechariah 8–11</span><span class="when"><b>Fri, Mar 5</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Zechariah 12–14</span><span class="when"><b>Sat, Mar 6</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Malachi 1–4</span><span class="when"><b>Sun, Mar 7</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 1–4</span><span class="when"><b>Mon, Mar 8</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 5–7</span><span class="when"><b>Tue, Mar 9</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 8–10</span><span class="when"><b>Wed, Mar 10</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 11–13</span><span class="when"><b>Thu, Mar 11</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 14–17</span><span class="when"><b>Fri, Mar 12</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 18–20</span><span class="when"><b>Sat, Mar 13</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 21–23</span><span class="when"><b>Sun, Mar 14</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 24–25</span><span class="when"><b>Mon, Mar 15</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 26</span><span class="when"><b>Tue, Mar 16</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Matthew 27–28</span><span class="when"><b>Wed, Mar 17</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 1–3</span><span class="when"><b>Thu, Mar 18</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 4–5</span><span class="when"><b>Fri, Mar 19</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 6–8</span><span class="when"><b>Sat, Mar 20</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 9–10</span><span class="when"><b>Sun, Mar 21</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 11–13</span><span class="when"><b>Mon, Mar 22</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Mark 14–16</span><span class="when"><b>Tue, Mar 23</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 1–2</span><span class="when"><b>Wed, Mar 24</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 3–5</span><span class="when"><b>Thu, Mar 25</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 6–7</span><span class="when"><b>Fri, Mar 26</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 8–9</span><span class="when"><b>Sat, Mar 27</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 10–11</span><span class="when"><b>Sun, Mar 28</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 12–13</span><span class="when"><b>Mon, Mar 29</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 14–17</span><span class="when"><b>Tue, Mar 30</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 18–19</span><span class="when"><b>Wed, Mar 31</b></span></div></li>
-</ul></section>
-<section class="slot"><h3>April 2027</h3><ul class="items">
-<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 20–22</span><span class="when"><b>Thu, Apr 1</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Luke 23–24</span><span class="when"><b>Fri, Apr 2</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">John 1–3</span><span class="when"><b>Sat, Apr 3</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">John 4–5</span><span class="when"><b>Sun, Apr 4</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">John 6–7</span><span class="when"><b>Mon, Apr 5</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">John 8–9</span><span class="when"><b>Tue, Apr 6</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">John 10–12</span><span class="when"><b>Wed, Apr 7</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">John 13–15</span><span class="when"><b>Thu, Apr 8</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">John 16–18</span><span class="when"><b>Fri, Apr 9</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">John 19–21</span><span class="when"><b>Sat, Apr 10</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 1–3</span><span class="when"><b>Sun, Apr 11</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 4–6</span><span class="when"><b>Mon, Apr 12</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 7–8</span><span class="when"><b>Tue, Apr 13</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 9–11</span><span class="when"><b>Wed, Apr 14</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 12–14</span><span class="when"><b>Thu, Apr 15</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 15–16</span><span class="when"><b>Fri, Apr 16</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 17–19</span><span class="when"><b>Sat, Apr 17</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 20–21</span><span class="when"><b>Sun, Apr 18</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 22–23</span><span class="when"><b>Mon, Apr 19</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 24–26</span><span class="when"><b>Tue, Apr 20</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Acts 27–28</span><span class="when"><b>Wed, Apr 21</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Romans 1–3</span><span class="when"><b>Thu, Apr 22</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Romans 4–7</span><span class="when"><b>Fri, Apr 23</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Romans 8–11</span><span class="when"><b>Sat, Apr 24</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Romans 12–16</span><span class="when"><b>Sun, Apr 25</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Corinthians 1–6</span><span class="when"><b>Mon, Apr 26</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Corinthians 7–10</span><span class="when"><b>Tue, Apr 27</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Corinthians 11–14</span><span class="when"><b>Wed, Apr 28</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Corinthians 15–16</span><span class="when"><b>Thu, Apr 29</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Corinthians 1–6</span><span class="when"><b>Fri, Apr 30</b></span></div></li>
-</ul></section>
-<section class="slot"><h3>May 2027</h3><ul class="items">
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Corinthians 7–10</span><span class="when"><b>Sat, May 1</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Corinthians 11–13</span><span class="when"><b>Sun, May 2</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Galatians 1–6</span><span class="when"><b>Mon, May 3</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Ephesians 1–6</span><span class="when"><b>Tue, May 4</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Philippians 1–4</span><span class="when"><b>Wed, May 5</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Colossians 1–4</span><span class="when"><b>Thu, May 6</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Thessalonians 1–5</span><span class="when"><b>Fri, May 7</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Thessalonians 1–3</span><span class="when"><b>Sat, May 8</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Timothy 1–6</span><span class="when"><b>Sun, May 9</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Timothy 1–4</span><span class="when"><b>Mon, May 10</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Titus &amp; Philemon</span><span class="when"><b>Tue, May 11</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Hebrews 1–6</span><span class="when"><b>Wed, May 12</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Hebrews 7–10</span><span class="when"><b>Thu, May 13</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Hebrews 11–13</span><span class="when"><b>Fri, May 14</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">James 1–5</span><span class="when"><b>Sat, May 15</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 Peter 1–5</span><span class="when"><b>Sun, May 16</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 Peter 1–3</span><span class="when"><b>Mon, May 17</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">1 John 1–5</span><span class="when"><b>Tue, May 18</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">2 John, 3 John &amp; Jude</span><span class="when"><b>Wed, May 19</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Revelation 1–4</span><span class="when"><b>Thu, May 20</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Revelation 5–9</span><span class="when"><b>Fri, May 21</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Revelation 10–14</span><span class="when"><b>Sat, May 22</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Revelation 15–18</span><span class="when"><b>Sun, May 23</b></span></div></li>
-<li class="item"><div class="check" style="cursor:default"><span class="t">Revelation 19–22</span><span class="when"><b>Mon, May 24</b></span></div></li>
-</ul></section></div></main>
+<main id="main"><div class="wrap stack" id="view"><div class="card"><h2>Bible Reading in 1 Year</h2><p>One reading a day from Genesis to Revelation, with 2 a day to catch up when you fall behind.</p><p class="hint" style="margin:0">If the app doesn’t appear in a moment, close this page and open it again in Safari or Chrome.</p></div></div></main>
 <nav class="tabs" aria-label="Sections">
   <button type="button" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg>Today</button>
   <button type="button" data-tab="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z"/><path d="M12 6.5v13"/></svg>Plan</button>
@@ -423,6 +216,33 @@ var DAY_MS = 86400000;
 function dayOf(y, m, d) { return Math.round(Date.UTC(y, m - 1, d) / DAY_MS); }
 function parseISO(s) { var p = s.split("-").map(Number); return dayOf(p[0], p[1], p[2]); }
 function isoOf(n) { return new Date(n * DAY_MS).toISOString().slice(0, 10); }
+/* Same rule for any plan: days[j] is the scheduled day of the j-th reading (in order). While behind, the next
+   `pace` unread readings go on each day; once caught up, each reading on its scheduled day. */
+function computePlanDays(days, done, T, pace) {
+  var n = days.length, todayISO = isoOf(T);
+  var pool = [], checkedToday = [], doneCount = 0, behind = 0, dueStart = 0;
+  for (var i = 0; i < n; i++) {
+    var d = done[i];
+    if (d === undefined) { pool.push(i); if (days[i] < T) behind++; }
+    else { doneCount++; if (d === todayISO) checkedToday.push(i); }
+    if (days[i] <= T && (d === undefined || d === todayISO)) dueStart++;
+  }
+  var target = Math.min(pace, dueStart), planned = new Map(), todayList = checkedToday.slice(), p = 0;
+  var need = Math.max(0, target - checkedToday.length);
+  for (var k = 0; k < need && p < pool.length; k++) { planned.set(pool[p], T); todayList.push(pool[p]); p++; }
+  todayList.sort(function (a, b) { return a - b; });
+  var caughtUp = (p >= pool.length || days[pool[p]] > T) ? T : null, day = T;
+  while (p < pool.length) {
+    day++;
+    if (days[pool[p]] > day) day = days[pool[p]];
+    var take = 0;
+    while (take < pace && p + take < pool.length && days[pool[p + take]] <= day) take++;
+    for (var t = 0; t < take; t++) { planned.set(pool[p], day); p++; }
+    if (caughtUp === null && (p >= pool.length || days[pool[p]] > day)) caughtUp = day;
+  }
+  return { pool: pool, planned: planned, todayList: todayList, caughtUp: caughtUp, behind: behind,
+           doneCount: doneCount, target: target, finish: pool.length ? day : null };
+}
 /* Reading i is scheduled for startDay + i. While behind, the next `pace` unread readings go on each day;
    once caught up, one a day on its scheduled date. done: {index: "-" | "YYYY-MM-DD"}. */
 function computePlan(n, startDay, done, T, pace) {
@@ -468,16 +288,112 @@ const LS_KEY = "bible-reading-v2";
 const OLD_KEY = "bible-1yr-progress-v1";      // progress saved by the earlier version of this page
 const DOC_PATH = "reading/main";
 const PACE = 2;                               // catch-up pace: 2 readings a day
-const DEFAULT_PLACE = 117;                    // the spreadsheet's "Current Location": 2 Kings 4–5
 const ISO = /^\d{4}-\d{2}-\d{2}$/;
 let n = 0;
 const uid = () => Date.now().toString(36) + (n++).toString(36) + Math.random().toString(36).slice(2,6);
 const label0 = (i) => { const r = PLAN.readings[i]; return r[1] ? PLAN.books[r[0]] + " " + r[1] : PLAN.books[r[0]]; };
 const okDone = (v) => v === "-" || (typeof v === "string" && ISO.test(v));
 
+// ---------------------------------------------------------------- reading plans (sources: jw.org and wol.jw.org)
+const BOOK66 = ["Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth","1 Samuel","2 Samuel","1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Esther","Job","Psalms","Proverbs","Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations","Ezekiel","Daniel","Hosea","Joel","Amos","Obadiah","Jonah","Micah","Nahum","Habakkuk","Zephaniah","Haggai","Zechariah","Malachi","Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus","Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"];
+const bookNo = (name) => BOOK66.indexOf(name) + 1;
+// Readings in the schedule that cover more than one whole book
+const COMBINED = { "Obadiah & Jonah":["Obadiah","Jonah"], "Nahum & Habakkuk":["Nahum","Habakkuk"], "Zephaniah & Haggai":["Zephaniah","Haggai"],
+  "Titus & Philemon":["Titus","Philemon"], "2 John, 3 John & Jude":["2 John","3 John","Jude"] };
+const firstBook = (label) => COMBINED[label] ? COMBINED[label][0] : label;
+// When each book's writing was completed, from jw.org's "Table of the Books of the Bible" (B.C.E. as negative; for a range, the later year)
+const WRITTEN = { "Genesis":-1513,"Exodus":-1512,"Leviticus":-1512,"Numbers":-1473,"Deuteronomy":-1473,"Joshua":-1450,"Judges":-1100,"Ruth":-1090,
+  "1 Samuel":-1078,"2 Samuel":-1040,"1 Kings":-580,"2 Kings":-580,"1 Chronicles":-460,"2 Chronicles":-460,"Ezra":-460,"Nehemiah":-443,"Esther":-475,
+  "Job":-1473,"Psalms":-460,"Proverbs":-717,"Ecclesiastes":-1000,"Song of Solomon":-1020,"Isaiah":-732,"Jeremiah":-580,"Lamentations":-607,
+  "Ezekiel":-591,"Daniel":-536,"Hosea":-745,"Joel":-820,"Amos":-804,"Obadiah":-607,"Jonah":-844,"Micah":-717,"Nahum":-632,"Habakkuk":-628,
+  "Zephaniah":-648,"Haggai":-520,"Zechariah":-518,"Malachi":-443,"Matthew":41,"Mark":65,"Luke":58,"John":98,"Acts":61,"Romans":56,
+  "1 Corinthians":55,"2 Corinthians":55,"Galatians":52,"Ephesians":61,"Philippians":61,"Colossians":61,"1 Thessalonians":50,"2 Thessalonians":51,
+  "1 Timothy":64,"2 Timothy":65,"Titus":64,"Philemon":61,"Hebrews":61,"James":62,"1 Peter":64,"2 Peter":64,"1 John":98,"2 John":98,"3 John":98,
+  "Jude":65,"Revelation":96 };
+// The sections of jw.org's printable Bible Reading Schedule
+const THEMES = [
+  { id:"moses",    name:"Moses’ writings (Genesis–Deuteronomy)",          from:"Genesis",   to:"Deuteronomy" },
+  { id:"land",     name:"Into the Promised Land (Joshua–Ruth)",           from:"Joshua",    to:"Ruth" },
+  { id:"kings",    name:"The kings (1 Samuel–2 Chronicles)",              from:"1 Samuel",  to:"2 Chronicles" },
+  { id:"exile",    name:"Return from exile (Ezra–Esther)",                from:"Ezra",      to:"Esther" },
+  { id:"songs",    name:"Songs and wisdom (Job–Song of Solomon)",         from:"Job",       to:"Song of Solomon" },
+  { id:"prophets", name:"The prophets (Isaiah–Malachi)",                  from:"Isaiah",    to:"Malachi" },
+  { id:"jesus",    name:"Jesus’ life and ministry (Matthew–John)",        from:"Matthew",   to:"John" },
+  { id:"acts",     name:"The early Christian congregation (Acts)",        from:"Acts",      to:"Acts" },
+  { id:"paul",     name:"Paul’s letters (Romans–Philemon)",               from:"Romans",    to:"Philemon" },
+  { id:"others",   name:"Other apostles and disciples (Hebrews–Revelation)", from:"Hebrews", to:"Revelation" } ];
+// "Each day, read from a different section" (jw.org). day: 0 = Sunday … 6 = Saturday
+const WEEK = [
+  { day:1, name:"History (Genesis–Esther)",                  ranges:[["Genesis","Esther"]] },
+  { day:2, name:"Jesus’ life (Matthew–John)",                ranges:[["Matthew","John"]] },
+  { day:3, name:"Early Christianity (Acts)",                 ranges:[["Acts","Acts"]] },
+  { day:4, name:"Prophecy (Isaiah–Malachi, Revelation)",     ranges:[["Isaiah","Malachi"],["Revelation","Revelation"]] },
+  { day:5, name:"Poetry and song (Job, Psalms, Song of Solomon)", ranges:[["Job","Psalms"],["Song of Solomon","Song of Solomon"]] },
+  { day:6, name:"Wisdom (Proverbs, Ecclesiastes)",           ranges:[["Proverbs","Ecclesiastes"]] },
+  { day:0, name:"Letters (Romans–Jude)",                     ranges:[["Romans","Jude"]] } ];
+const DAYNAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+function weekSection(label){
+  const n = bookNo(firstBook(label));
+  const w = WEEK.findIndex(sec => sec.ranges.some(r => n >= bookNo(r[0]) && n <= bookNo(r[1])));
+  return w < 0 ? 0 : w;
+}
+const PACES = [[1,"One reading a day"],[2,"One reading every 2 days"],[3,"One reading every 3 days"]];
+const planKey = (p) => p.kind === "theme" ? "theme:" + p.theme : p.kind;
+function parsePlanKey(key, pace){
+  const k = String(key || "year"), pc = [1,2,3].indexOf(+pace) >= 0 ? +pace : 1;
+  if(k.indexOf("theme:") === 0){ const id = k.slice(6); return { kind:"theme", theme: THEMES.some(t=>t.id===id) ? id : "prophets", pace:pc }; }
+  return { kind: ["year","chrono","week"].indexOf(k) >= 0 ? k : "year", theme:"", pace:pc };
+}
+function planName(p){
+  p = p || S.plan;
+  const base = p.kind === "chrono" ? "Whole Bible, in the order the books were written"
+    : p.kind === "week" ? "A different section each day of the week"
+    : p.kind === "theme" ? "Theme: " + (THEMES.find(t=>t.id===p.theme) || THEMES[0]).name
+    : "Whole Bible, in order";
+  return p.kind === "week" || p.pace === 1 ? base : base + " · every " + p.pace + " days";
+}
+function planOptions(selKey){
+  const o = (k, label) => `<option value="${k}" ${k===selKey?"selected":""}>${esc(label)}</option>`;
+  return `<optgroup label="Whole Bible">${o("year","In order (Genesis to Revelation)")}${o("chrono","In the order the books were written")}${o("week","A different section each day of the week")}</optgroup>`
+    + `<optgroup label="One theme">${THEMES.map(t=>o("theme:"+t.id, t.name)).join("")}</optgroup>`;
+}
+function paceOptions(sel){ return PACES.map(p=>`<option value="${p[0]}" ${p[0]===sel?"selected":""}>${p[1]}</option>`).join(""); }
+// The readings for a plan, built from the schedule's sets
+function buildReadings(spec){
+  let sets = PLAN.readings.map((r,i)=>({ id:"r"+i, t:label0(i), book:PLAN.books[r[0]] }));
+  if(spec.kind === "theme"){
+    const th = THEMES.find(t=>t.id===spec.theme) || THEMES[0], a = bookNo(th.from), b = bookNo(th.to);
+    sets = sets.filter(x => { const n = bookNo(firstBook(x.book)); return n >= a && n <= b; });
+  } else if(spec.kind === "chrono"){
+    const out = [];
+    sets.forEach(x => { if(COMBINED[x.book]) COMBINED[x.book].forEach((bk,k)=>out.push({ id:x.id+"."+k, t:bk, book:bk })); else out.push(x); });
+    out.forEach((x,i)=>{ x.n = i; });
+    out.sort((x,y)=> (WRITTEN[x.book]-WRITTEN[y.book]) || (bookNo(x.book)-bookNo(y.book)) || (x.n-y.n));
+    sets = out;
+  }
+  return sets.map(x=>({ id:x.id, t:x.t, done:"" }));
+}
+// Days after the start date on which each reading is scheduled
+function offsets(){
+  const p = S.plan, n = S.readings.length, off = new Array(n);
+  if(p.kind !== "week"){ for(let i=0;i<n;i++) off[i] = i * p.pace; return off; }
+  const wd0 = (((parseISO(S.start) + 4) % 7) + 7) % 7;      // 1970-01-01 was a Thursday
+  const count = {};
+  S.readings.forEach((x,i)=>{ const w = weekSection(split(x.t).book), k = count[w] || 0; count[w] = k + 1;
+    off[i] = ((WEEK[w].day - wd0 + 7) % 7) + 7 * k; });
+  return off;
+}
+// Read a chapter on wol.jw.org (New World Translation)
+function wolUrl(t){
+  const sp = split(t), n = bookNo(firstBook(sp.book)); if(!n) return "";
+  const m = /\d+/.exec(sp.ch || ""), ch = m ? m[0] : "1";
+  return "https://wol.jw.org/en/wol/b/r1/lp-e/nwtsty/" + n + "/" + ch;
+}
+
 function makeDefault(){
-  return { v:2, updatedAt:0, start:PLAN.start, notes:"", dayNotes:{},
-    readings: PLAN.readings.map((r,i)=>({ id:"r"+i, t:label0(i), done: i < DEFAULT_PLACE ? "-" : "" })) };
+  const today = new Date(); const todayISO = isoOf(dayOf(today.getFullYear(), today.getMonth()+1, today.getDate()));
+  return { v:2, updatedAt:0, setup:false, start:todayISO, notes:"", dayNotes:{}, plan:{ kind:"year", theme:"", pace:1 },
+    readings: PLAN.readings.map((r,i)=>({ id:"r"+i, t:label0(i), done:"" })) };
 }
 
 // ---------------------------------------------------------------- state
@@ -490,7 +406,10 @@ function normalize(s){
   s.readings = s.readings.filter(x => x && typeof x === "object")
     .map(x => ({ id: String(x.id || uid()), t: String(x.t == null ? "" : x.t), done: okDone(x.done) ? x.done : "" }));
   if(typeof s.notes !== "string") s.notes = "";
+  if(!s.archive || typeof s.archive !== "object" || Array.isArray(s.archive)) s.archive = {};
   if(!s.dayNotes || typeof s.dayNotes !== "object" || Array.isArray(s.dayNotes)) s.dayNotes = {};
+  if(typeof s.setup !== "boolean") s.setup = true;     // anything saved before this option existed was already set up
+  s.plan = parsePlanKey(s.plan ? planKey(s.plan) : "year", s.plan && s.plan.pace);   // older saves: the one-year plan, one a day
   s.v = 2; s.updatedAt = Number(s.updatedAt) || 0;
   return s;
 }
@@ -512,6 +431,14 @@ function readLocal(){
 function writeLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} }
 
 let S = normalize(readLocal());
+(function applyPersonalLink(){
+  if(S.setup) return;                                   // never overwrite someone's saved progress
+  let q = null; try{ q = new URLSearchParams(location.search); }catch(e){ return; }
+  const st = q && q.get("start"); if(!st || !ISO.test(st)) return;
+  let k = parseInt(q.get("next") || "1", 10); if(!(k >= 1)) k = 1; k = Math.min(k - 1, S.readings.length);
+  S.start = st; S.readings.forEach((x,i)=>{ x.done = i < k ? "-" : ""; });
+  S.setup = true; S.updatedAt = Date.now(); writeLocal();
+})();
 const ui = { tab:"today", day:null, edit:false, confirm:null, planScrolled:false, placeSel:null };
 
 const getP = (p) => p.split(".").reduce((o,k)=> o == null ? o : o[k], S);
@@ -540,19 +467,33 @@ function split(t){
 // ---------------------------------------------------------------- the plan, worked out from the state
 let P = null;
 function plan(){
-  const T = todayNum(), done = {};
-  S.readings.forEach((x,i)=>{ if(x.done) done[i] = x.done; });
-  const c = computePlan(S.readings.length, parseISO(S.start), done, T, PACE);
+  const T = todayNum(), startDay = parseISO(S.start), n = S.readings.length;
+  const off = offsets();
+  const order = S.readings.map((_,i)=>i).sort((a,b)=> off[a]-off[b] || a-b);
+  const days = order.map(i => startDay + off[i]);
+  const r = computePlanDays(days, order.map(i => S.readings[i].done || undefined), T, PACE);
+  const c = { T, startDay, order, rank:new Array(n), caughtUp:r.caughtUp, behind:r.behind, doneCount:r.doneCount, target:r.target, finish:r.finish };
+  order.forEach((i,j)=>{ c.rank[i] = j; });
+  c.sched = (i) => startDay + off[i];
+  c.pool = r.pool.map(j => order[j]);
+  c.planned = new Map(); r.planned.forEach((d,j)=> c.planned.set(order[j], d));
+  c.todayList = r.todayList.map(j => order[j]);
+  c.firstUnread = r.pool.length ? order[r.pool[0]] : n;
+  c.youPos = r.pool.length ? r.pool[0] : n;
+  c.schedPos = days.filter(d => d < T).length;
+  c.lastDay = n ? days[n-1] : startDay;
   c.byDay = new Map();
   c.planned.forEach((d,i)=>{ if(!c.byDay.has(d)) c.byDay.set(d, []); c.byDay.get(d).push(i); });
+  c.byDay.forEach(list => list.sort((a,b)=>c.rank[a]-c.rank[b]));
   c.readOn = new Map();
   S.readings.forEach((x,i)=>{ if(x.done && x.done !== "-"){ const d = parseISO(x.done); if(!c.readOn.has(d)) c.readOn.set(d, []); c.readOn.get(d).push(i); } });
   P = c;
   return c;
 }
+const unit = (n) => (S.plan.kind === "week" || S.plan.pace > 1 ? " reading" : " day") + (n === 1 ? "" : "s");
 function dayItems(c, d){
   if(d === c.T) return c.todayList;
-  if(d < c.T) return (c.readOn.get(d) || []).slice().sort((a,b)=>a-b);
+  if(d < c.T) return (c.readOn.get(d) || []).slice().sort((a,b)=>c.rank[a]-c.rank[b]);
   return c.byDay.get(d) || [];
 }
 
@@ -610,35 +551,38 @@ function checkRow(c, i, o){
   }
   return `<li class="item ${o.main?"main":""}" ${o.anchor?`id="r${i}"`:""}>
     <label class="check"><input type="checkbox" id="${fid((o.anchor?"p":"d")+".r"+i)}" data-tick="${i}" ${isDone?"checked":""}><span class="box"></span><span class="t">${o.short?`<span class="sr">${esc(split(x.t).book)} </span>`:""}${esc(text)}</span>${when}</label>
-    ${o.sub ? `<span class="tag">${esc(o.sub)}</span>` : ""}</li>`;
+    ${o.sub || o.read ? `<span class="tag">${o.sub ? esc(o.sub) : ""}${o.read && wolUrl(x.t) ? `${o.sub ? " · " : ""}<a href="${wolUrl(x.t)}" target="_blank" rel="noopener">Read on wol.jw.org</a>` : ""}</span>` : ""}</li>`;
 }
 
 function stripHTML(c){
-  const N = S.readings.length;
-  const youPct = c.firstUnread / N * 100;
-  const sIdx = Math.max(0, Math.min(N, c.T - c.startDay));
+  const N = S.readings.length, O = c.order;
+  if(!N) return "";
+  const youPct = c.youPos / N * 100;
+  const sIdx = Math.max(0, Math.min(N, c.schedPos));
   const sPct = sIdx / N * 100;
-  const ntAt = S.readings.findIndex(x => /^Matthew\b/.test(x.t));
+  const ntPos = S.plan.kind === "year" ? O.findIndex(i => /^Matthew\b/.test(S.readings[i].t)) : -1;
   const place = (pct) => pct < 18 ? "translateX(-7px)" : pct > 82 ? "translateX(calc(-100% + 7px))" : "translateX(-50%)";
   const youTxt = c.pool.length ? "You’re in " + split(S.readings[c.firstUnread].t).book : "Finished";
-  const sTxt = sIdx >= N ? "Schedule: finished" : "Schedule: " + split(S.readings[sIdx].t).book;
+  const sTxt = sIdx >= N ? "Schedule: finished" : "Schedule: " + split(S.readings[O[sIdx]].t).book;
+  const first = split(S.readings[O[0]].t).book, last = split(S.readings[O[N-1]].t).book;
   return `<div class="strip" role="img" aria-label="${esc(youTxt)}. ${esc(sTxt)}.">
     <div class="srow above"><span class="slabel you" style="left:${youPct}%;transform:${place(youPct)}">${esc(youTxt)}</span></div>
     <div class="bar"><div class="fill" style="width:${youPct}%"></div>
       <div class="gap" style="left:${youPct}%;width:${Math.max(0,sPct-youPct)}%"></div>
-      ${ntAt > 0 ? `<div class="nt" style="left:${ntAt/N*100}%"></div>` : ""}
+      ${ntPos > 0 ? `<div class="nt" style="left:${ntPos/N*100}%"></div>` : ""}
       <div class="now" style="left:${sPct}%"></div>
       ${c.pool.length ? `<div class="ribbon" style="left:${youPct}%"></div>` : ""}</div>
     <div class="srow below"><span class="slabel sched" style="left:${sPct}%;transform:${place(sPct)}">${esc(sTxt)}</span></div>
-    <div class="ends"><span>Genesis</span><span>Revelation</span></div></div>`;
+    <div class="ends"><span>${esc(first)}</span><span>${esc(last)}</span></div></div>`;
 }
 
 function statusText(c){
-  if(!c.pool.length) return `<b class="ok">Finished!</b> You’ve read the whole Bible.`;
-  if(c.behind > 0) return c.caughtUp === c.T ? `<b>${c.behind} day${c.behind===1?"":"s"} behind.</b> Finish today’s reading and you’re caught up.`
-    : `<b>${c.behind} day${c.behind===1?"":"s"} behind.</b> At 2 a day you’ll be caught up ${esc(fmt(c.caughtUp))}.`;
+  if(!c.pool.length) return `<b class="ok">Finished!</b> You’ve read ${S.plan.kind === "theme" ? "this whole plan" : "the whole Bible"}.`;
+  if(c.T < c.startDay) return `<b class="ok">Your plan starts ${esc(fmt(c.startDay))}.</b> First reading: ${esc(S.readings[c.firstUnread].t)}.`;
+  if(c.behind > 0) return c.caughtUp === c.T ? `<b>${c.behind}${unit(c.behind)} behind.</b> Finish today’s reading and you’re caught up.`
+    : `<b>${c.behind}${unit(c.behind)} behind.</b> At 2 a day you’ll be caught up ${esc(fmt(c.caughtUp))}.`;
   const ahead = c.sched(c.firstUnread) - c.T - 1;
-  return ahead >= 1 ? `<b class="ok">${ahead} day${ahead===1?"":"s"} ahead.</b> Nice work.` : `<b class="ok">On schedule.</b>`;
+  return ahead >= 1 && S.plan.kind !== "week" && S.plan.pace === 1 ? `<b class="ok">${ahead} day${ahead===1?"":"s"} ahead.</b> Nice work.` : `<b class="ok">On schedule.</b>`;
 }
 
 function renderToday(c){
@@ -652,8 +596,8 @@ function renderToday(c){
   }
   const items = dayItems(c, d), done = items.filter(i=>S.readings[i].done).length;
   const iso = isoOf(d);
-  const rows = items.map(i => checkRow(c, i, { sub: c.sched(i) !== d ? "Scheduled " + fmt(c.sched(i)) : "On schedule" })).join("");
-  const emptyMsg = d < T ? "Nothing was marked read on this day." : (c.pool.length ? "Nothing due on this day. You’re ahead!" : "You’ve finished the whole plan.");
+  const rows = items.map(i => checkRow(c, i, { read:true, sub: c.sched(i) !== d ? "Scheduled " + fmt(c.sched(i)) : "On schedule" })).join("");
+  const emptyMsg = d < T ? "Nothing was marked read on this day." : (!c.pool.length ? "You’ve finished the whole plan." : d < c.startDay ? "Your plan starts " + fmt(c.startDay) + "." : "No reading planned for this day.");
   const allDone = items.length && done === items.length && !ui.edit;
   let next = "";
   if(allDone && d === T){ const nx = Array.from(c.byDay.keys()).filter(k=>k>T).sort((a,b)=>a-b)[0];
@@ -675,7 +619,8 @@ function renderToday(c){
     <textarea class="notearea" id="${fid("dayNotes."+iso)}" data-path="dayNotes.${iso}" placeholder="Thoughts, favorite verses, questions…">${esc(S.dayNotes[iso] || "")}</textarea>
   </section>
   <div class="card">
-    <h2>Your place in the Bible</h2>
+    <h2>${S.plan.kind === "year" || S.plan.kind === "chrono" ? "Your place in the Bible" : "Your place in this plan"}</h2>
+    <p class="hint" style="margin:-4px 0 4px">${esc(planName())}</p>
     ${stripHTML(c)}
     <div class="stats">
       <div>Read<b>${c.doneCount} of ${S.readings.length}</b></div>
@@ -686,21 +631,25 @@ function renderToday(c){
 }
 
 function renderPlan(c){
-  const today = new Set(c.todayList);
-  const groups = [];
-  S.readings.forEach((x,i)=>{ const b = split(x.t).book; const g = groups[groups.length-1];
-    if(g && g.book === b) g.idx.push(i); else groups.push({ book:b, idx:[i] }); });
+  const today = new Set(c.todayList), week = S.plan.kind === "week", groups = [];
+  c.order.forEach(i=>{
+    const key = week ? Math.floor((c.sched(i) - c.startDay) / 7) : split(S.readings[i].t).book;
+    const g = groups[groups.length-1];
+    if(g && g.key === key) g.idx.push(i); else groups.push({ key, idx:[i] });
+  });
   const secs = groups.map(g=>{
     const done = g.idx.filter(i=>S.readings[i].done).length;
-    return `<section class="slot"><h3>${esc(g.book)} <small>· ${done} of ${g.idx.length}</small></h3><ul class="items">
-      ${g.idx.map(i=>checkRow(c, i, { short:true, dates:true, anchor:true, main: today.has(i), del:true })).join("")}</ul>
-      ${ui.edit ? `<button type="button" class="add" data-act="addReading" data-after="${g.idx[g.idx.length-1]}" data-book="${esc(g.book)}">+ Add a reading to ${esc(g.book)}</button>` : ""}</section>`;
+    const title = week ? "Week " + (g.key + 1) + " · " + fmt(c.startDay + g.key * 7, {weekday:false}) : g.key;
+    const last = g.idx[g.idx.length-1];
+    return `<section class="slot"><h3>${esc(title)} <small>· ${done} of ${g.idx.length}</small></h3><ul class="items">
+      ${g.idx.map(i=>checkRow(c, i, { short:!week, dates:true, anchor:true, main: today.has(i), del:true })).join("")}</ul>
+      ${ui.edit && !week ? `<button type="button" class="add" data-act="addReading" data-after="${last}" data-book="${esc(g.key)}">+ Add a reading to ${esc(g.key)}</button>` : ""}</section>`;
   }).join("");
   return `
-  ${ui.edit ? `<div class="editnote">Editing: change the words of any reading, delete it, or add a new one. Each reading is one day on the schedule, so adding or deleting moves later dates. Tap <b>Done</b> when finished.</div>` : ""}
+  ${ui.edit ? `<div class="editnote">Editing: change the words of any reading${week ? "" : ", delete it, or add a new one. Adding or deleting moves later dates"}. Tap <b>Done</b> when finished.</div>` : ""}
   <div class="card">
-    <h2>The whole plan</h2>
-    <p class="hint">Tap a box when you’ve read it. The bold date is your day to read it at 2 a day until you’re caught up. When that’s different from the original schedule, the original date is underneath.</p>
+    <h2>${esc(planName())}</h2>
+    <p class="hint">Tap a box when you’ve read it. The bold date is your day to read it, with 2 a day until you’re caught up. When that’s different from the original schedule, the original date is underneath.</p>
     <button type="button" class="btn ghost" style="width:100%" data-act="jump">Go to today</button>
   </div>
   ${secs}`;
@@ -720,18 +669,27 @@ function renderNotes(){
 
 let placeMsg = "", backupMsg = { t:"", bad:false };
 function renderMore(c){
-  const sel = ui.placeSel == null ? c.firstUnread : ui.placeSel;
-  const opts = S.readings.map((x,i)=>`<option value="${i}" ${i===sel?"selected":""}>${esc(x.t)}</option>`).join("")
+  const sel = ui.placeSel == null ? c.youPos : ui.placeSel;
+  const opts = c.order.map((i,j)=>`<option value="${j}" ${j===sel?"selected":""}>${esc(S.readings[i].t)}</option>`).join("")
     + `<option value="${S.readings.length}" ${sel>=S.readings.length?"selected":""}>I’ve finished the whole plan</option>`;
+  const mKey = ui.mPlan || planKey(S.plan), mPace = ui.mPace || S.plan.pace, mWeek = mKey === "week";
   return `
+  <section class="card"><h2>Reading plan</h2>
+    <p style="margin:0 0 10px"><b>${esc(planName())}</b></p>
+    <div class="field"><label for="m-plan">Change to</label><select id="m-plan">${planOptions(mKey)}</select></div>
+    <div class="field" style="margin-top:10px"><label for="m-pace">Pace</label><select id="m-pace" ${mWeek?"disabled":""}>${paceOptions(mWeek ? 1 : mPace)}</select></div>
+    <p class="plandesc">${mWeek ? "One reading from each section on its own day of the week." : ""}</p>
+    <p class="hint" style="margin:8px 0 10px">Readings you’ve already ticked stay ticked if they’re in the new plan. Your start date stays the same.</p>
+    <button type="button" class="btn ${ui.confirm==="switch"?"warn":"ghost"}" style="width:100%" data-act="switchPlan">${ui.confirm==="switch"?"Tap again to switch plans":"Switch to this plan"}</button>
+  </section>
   <section class="card"><h2>Where you are</h2>
     <div class="field"><label for="f-place">Next reading to read</label><select id="f-place">${opts}</select></div>
     <p class="hint" style="margin:8px 0 10px">Marks every reading before it as read, and that reading and everything after it as not read yet.</p>
     <button type="button" class="btn ${ui.confirm==="place"?"warn":"ghost"}" style="width:100%" data-act="place">${ui.confirm==="place"?"Tap again to set your place":"Set my place"}</button>
   </section>
   <section class="card"><h2>Start date</h2>
-    <div class="field"><label for="f-start">Bethel start date</label><input type="date" id="f-start" data-path="start" value="${esc(S.start)}"></div>
-    <p class="hint" style="margin:8px 0 0">The schedule runs one reading a day from this date. Catch-up is 2 readings a day.</p>
+    <div class="field"><label for="f-start">Start date</label><input type="date" id="f-start" data-path="start" value="${esc(S.start)}"></div>
+    <p class="hint" style="margin:8px 0 0">Your plan’s schedule counts from this date. Catch-up is 2 readings a day.</p>
   </section>
   <section class="card"><h2>Keep it on your phone</h2>
     <p class="hint">Do this once, from this page in your phone’s web browser:</p>
@@ -749,10 +707,44 @@ function renderMore(c){
     <div class="field" style="margin-top:10px"><label for="f-backup">Backup code</label><textarea id="f-backup" spellcheck="false" autocomplete="off" placeholder="Paste a backup code here, then tap Restore from code." style="min-height:80px;font:13px/1.4 ui-monospace,Menlo,monospace"></textarea></div>
     ${backupMsg.t ? `<p class="msgline ${backupMsg.bad?"bad":""}" role="status">${esc(backupMsg.t)}</p>` : ""}
   </section>
-  <section class="card"><h2>Clear all checkmarks</h2>
-    <p class="hint">Unticks every reading, including the ones read before. Your notes and any changes to the readings stay.</p>
-    <button type="button" class="btn ${ui.confirm==="clear"?"warn":"ghost"}" style="width:100%" data-act="clearAll">${ui.confirm==="clear"?"Tap again to clear every checkmark":"Clear all checkmarks"}</button>
+  <section class="card"><h2>Share it with someone</h2>
+    <p class="hint">Anyone can use this for their own Bible reading. Send them this address. Each person’s progress stays on their own phone.</p>
+    <p style="margin:8px 0 10px;font-weight:700;word-break:break-all" id="share-url">${esc(location.origin + location.pathname)}</p>
+    <button type="button" class="btn ghost" style="width:100%" data-act="copyLink">Copy the address</button>
+  </section>
+  <section class="card"><h2>Where the plans come from</h2>
+    <p class="hint">Only from jw.org and wol.jw.org:</p>
+    <ul class="srcs">
+      <li><a href="https://www.jw.org/en/library/series/more-topics/bible-reading-plan/" target="_blank" rel="noopener">Bible-Reading Plans</a>: the sets of chapters and their themed sections</li>
+      <li><a href="https://www.jw.org/en/library/bible/nwt/books-of-the-bible-list/" target="_blank" rel="noopener">Table of the Books of the Bible</a>: when each book was written</li>
+      <li><a href="https://www.jw.org/en/library/magazines/g200904/How-Can-I-Make-Bible-Reading-Enjoyable/" target="_blank" rel="noopener">How Can I Make Bible Reading Enjoyable?</a>: a different section each day</li>
+      <li><a href="https://www.jw.org/en/library/magazines/wp20090801/daily-bible-reading-schedule/" target="_blank" rel="noopener">Daily Bible Reading</a>: two or three days per reading for a slower pace</li>
+      <li><a href="https://wol.jw.org/en/wol/b/r1/lp-e/nwtsty/1/1" target="_blank" rel="noopener">Watchtower Online Library</a>: the Read links for each chapter</li>
+    </ul>
+  </section>
+  <section class="card"><h2>Start over</h2>
+    <p class="hint">Erases your progress, notes and any changes to the readings on this phone, and starts again from the Get started screen. Copy a backup code first if you might want them back.</p>
+    <button type="button" class="btn ${ui.confirm==="clear"?"warn":"ghost"}" style="width:100%" data-act="clearAll">${ui.confirm==="clear"?"Tap again to erase everything and start over":"Start over"}</button>
   </section>`;
+}
+
+function renderWelcome(){
+  const c = P || plan(), key = planKey(S.plan), wk = key === "week";
+  const opts = c.order.map((i,j)=>`<option value="${j}">${esc(S.readings[i].t)}</option>`).join("");
+  const ends = S.readings.length ? fmt(c.lastDay, {year:true}) : "";
+  return `
+  <div class="card"><h2>Welcome!</h2>
+    <p>Choose how you’d like to read: the whole Bible in order, in the order the books were written, a different section each day, or one theme at a time. If you fall behind, the app plans 2 readings a day until you’re caught up.</p>
+    <p class="hint" style="margin:0 0 8px">Your progress stays on this phone. Nobody else can see it, and you don’t need an account.</p>
+    <p class="hint" style="margin:0"><b>On iPhone:</b> add it to your Home Screen first (Share, then Add to Home Screen), then open it from the icon and set it up there. The icon keeps its own copy of your progress.</p></div>
+  <div class="card"><h2>Get started</h2>
+    <div class="field"><label for="w-plan">Reading plan</label><select id="w-plan">${planOptions(key)}</select></div>
+    <div class="field" style="margin-top:12px"><label for="w-pace">Pace</label><select id="w-pace" ${wk?"disabled":""}>${paceOptions(wk ? 1 : S.plan.pace)}</select></div>
+    <p class="plandesc">${S.readings.length} readings${ends ? " · ends " + esc(ends) + " if you start on the date below" : ""}${wk ? " · one from each section on its own day of the week" : ""}</p>
+    <div class="field" style="margin-top:12px"><label for="w-start">Your start date</label><input type="date" id="w-start" value="${esc(S.start)}"></div>
+    <div class="field" style="margin-top:12px"><label for="w-place">Your next reading</label><select id="w-place">${opts}</select></div>
+    <p class="hint" style="margin:10px 0 12px">Starting fresh? Leave the start date as today and your next reading as the first one. Already reading? Pick the day you started and the next reading you haven’t read yet.</p>
+    <button type="button" class="btn" style="width:100%" data-act="begin">Start my plan</button></div>`;
 }
 
 function render(){
@@ -760,12 +752,12 @@ function render(){
   const c = plan();
   const eb = document.getElementById("editBtn");
   eb.textContent = ui.edit ? "Done" : "Edit"; eb.setAttribute("aria-pressed", String(ui.edit));
-  eb.hidden = ui.tab === "notes" || ui.tab === "more";
-  document.getElementById("behind").textContent = !c.pool.length ? "Finished!" : c.behind > 0 ? `${c.behind} day${c.behind===1?"":"s"} behind` : "On schedule";
+  eb.hidden = !S.setup || ui.tab === "notes" || ui.tab === "more";
+  document.getElementById("behind").textContent = !S.setup ? "Welcome" : !c.pool.length ? "Finished!" : c.behind > 0 ? `${c.behind}${unit(c.behind)} behind` : c.T < c.startDay ? "Starts " + fmt(c.startDay, {weekday:false}) : "On schedule";
   document.querySelectorAll("nav.tabs button").forEach(a=>{ if(a.dataset.tab===ui.tab) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
   const v = document.getElementById("view");
   const focusId = document.activeElement && document.activeElement.id;
-  v.innerHTML = ui.tab==="plan" ? renderPlan(c) : ui.tab==="notes" ? renderNotes() : ui.tab==="more" ? renderMore(c) : renderToday(c);
+  v.innerHTML = !S.setup ? renderWelcome() : ui.tab==="plan" ? renderPlan(c) : ui.tab==="notes" ? renderNotes() : ui.tab==="more" ? renderMore(c) : renderToday(c);
   if(focusId && /^f-[dp]-r\d+$/.test(focusId)){ const f = document.getElementById(focusId); if(f) f.focus({ preventScroll:true }); }
 }
 
@@ -806,22 +798,46 @@ function encodeBackup(){
     if(v === null){ cur = null; return; }
     if(cur && cur[2] === v && cur[1] === i-1) cur[1] = i; else { cur = [i,i,v]; runs.push(cur); } });
   const def = makeDefault().readings, same = S.readings.length === def.length && S.readings.every((x,i)=>x.t === def[i].t);
-  const body = { v:2, s:S.start, r:runs, n:S.notes, dn:S.dayNotes, t: same ? null : S.readings.map(x=>x.t) };
+  const arc = archiveNow(), a = {}; Object.keys(arc).forEach(k=>{ if(arc[k].d) a[k] = arc[k].d; });
+  const body = { v:2, s:S.start, r:runs, n:S.notes, dn:S.dayNotes, p:S.plan, a, t: same ? null : S.readings.map(x=>x.t), i: same ? null : S.readings.map(x=>x.id) };
   return "BR2." + btoa(unescape(encodeURIComponent(JSON.stringify(body))));
 }
 function decodeBackup(code){
   const raw = String(code).trim(), body = raw.replace(/^BR[12]\./, "").replace(/\s+/g, "");
   const o = JSON.parse(decodeURIComponent(escape(atob(body))));
   const s = makeDefault();
-  if(Array.isArray(o.t)) s.readings = o.t.map((t,i)=>({ id:uid(), t:String(t), done:"" }));
+  if(o.p && typeof o.p === "object") s.plan = parsePlanKey(planKey(o.p), o.p.pace);
+  if(Array.isArray(o.t)) s.readings = o.t.map((t,i)=>({ id: Array.isArray(o.i) && o.i[i] ? String(o.i[i]) : uid(), t:String(t), done:"" }));
   s.readings.forEach(x=>{ x.done = ""; });
   (o.r || []).forEach(run=>{ for(let i=run[0]; i<=run[1] && i<s.readings.length; i++) s.readings[i].done = run[2] === 0 ? "-" : run[2]; });
   if(typeof o.s === "string") s.start = o.s;
   if(typeof o.n === "string") s.notes = o.n;
   if(o.dn && typeof o.dn === "object") s.dayNotes = o.dn;
+  if(o.a && typeof o.a === "object"){ s.archive = {}; Object.keys(o.a).forEach(k=>{ if(okDone(o.a[k])) s.archive[k] = { d:o.a[k], t:"" }; }); }
+  s.setup = true;                                   // a restored backup is a plan already in progress
   const out = normalize(s);
   if(!out.readings.length) throw new Error("empty");
   return out;
+}
+
+// Every tick ever made is remembered by reading (S.archive), whichever plan is showing, so switching plans never loses one.
+function archiveNow(){
+  const arc = S.archive || {};
+  S.readings.forEach(x=>{ arc[x.id] = { d:x.done || "", t:x.t }; });
+  const cur = new Set(S.readings.map(x=>x.id));
+  PLAN.readings.forEach((r,i)=>{                       // keep a combined reading and its single books in step
+    const lab = PLAN.books[r[0]]; if(!COMBINED[lab]) return;
+    const base = "r" + i, parts = COMBINED[lab].map((_,k)=>base + "." + k);
+    if(cur.has(base)) parts.forEach(pid => { arc[pid] = { d: arc[base].d, t: (arc[pid] && arc[pid].t) || "" }; });
+    else if(parts.some(pid => cur.has(pid))){ const all = parts.every(pid => arc[pid] && arc[pid].d); arc[base] = { d: all ? arc[parts[0]].d : "", t: (arc[base] && arc[base].t) || "" }; }
+  });
+  S.archive = arc;
+  return arc;
+}
+function switchTo(spec){
+  const arc = archiveNow(), fresh = buildReadings(spec);
+  fresh.forEach(x=>{ const o = arc[x.id]; if(o){ x.done = o.d || ""; if(o.t) x.t = o.t; } });
+  S.plan = spec; S.readings = fresh;
 }
 
 document.addEventListener("click", (e)=>{
@@ -829,7 +845,7 @@ document.addEventListener("click", (e)=>{
   if(tb){ e.preventDefault(); if(tb.dataset.tab === "plan" && ui.tab === "plan") jumpToday(true); else go(tb.dataset.tab); return; }
   const b = e.target.closest("[data-act]"); if(!b) return;
   const act = b.dataset.act;
-  if(act !== "place" && act !== "clearAll") ui.confirm = null;
+  if(act !== "place" && act !== "clearAll" && act !== "switchPlan") ui.confirm = null;
   switch(act){
     case "edit": ui.edit = !ui.edit; render(); return;
     case "day": ui.day = +b.dataset.d; render(); centerChip(); return;
@@ -844,11 +860,28 @@ document.addEventListener("click", (e)=>{
       ui.confirm = null;
       const k = ui.placeSel == null ? +document.getElementById("f-place").value : ui.placeSel;
       ui.placeSel = null;
-      S.readings.forEach((x,i)=>{ if(i < k){ if(!x.done) x.done = "-"; } else x.done = ""; });
-      save(); render(); toast(k < S.readings.length ? `Your place: ${S.readings[k].t}` : "Marked the whole plan as read"); return; }
+      const cc = P || plan();
+      S.readings.forEach((x,i)=>{ if(cc.rank[i] < k){ if(!x.done) x.done = "-"; } else x.done = ""; });
+      save(); render(); toast(k < S.readings.length ? `Your place: ${S.readings[cc.order[k]].t}` : "Marked the whole plan as read"); return; }
+    case "switchPlan": {
+      if(ui.confirm !== "switch"){ ui.confirm = "switch"; render(); return; }
+      ui.confirm = null;
+      switchTo(parsePlanKey(ui.mPlan || planKey(S.plan), ui.mPace || S.plan.pace));
+      ui.mPlan = null; ui.mPace = null; ui.day = null; ui.placeSel = null; ui.planScrolled = false;
+      save(); render(); toast("Plan changed"); return; }
     case "clearAll": {
       if(ui.confirm !== "clear"){ ui.confirm = "clear"; render(); return; }
-      ui.confirm = null; S.readings.forEach(x=>{ x.done = ""; }); save(); render(); toast("All checkmarks cleared"); return; }
+      ui.confirm = null; S = makeDefault(); S.updatedAt = Date.now(); ui.day = null; ui.edit = false; save(); go("today"); toast("Starting over"); return; }
+    case "begin": {
+      const st = document.getElementById("w-start").value, k = +document.getElementById("w-place").value;
+      if(!ISO.test(st)){ toast("Pick your start date first"); return; }
+      S.start = st; const cc = plan(); S.readings.forEach((x,i)=>{ x.done = cc.rank[i] < k ? "-" : ""; }); S.setup = true; ui.day = null;
+      save(); go("today"); toast("Your plan is ready"); return; }
+    case "copyLink": {
+      const url = location.origin + location.pathname;
+      const fb = ()=>{ const el = document.getElementById("share-url"); if(el && window.getSelection){ const r = document.createRange(); r.selectNodeContents(el); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); } toast("Press and hold the address, then tap Copy"); };
+      try{ if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(()=>toast("Address copied"), fb); else fb(); }catch(err){ fb(); }
+      return; }
     case "copyBackup": {
       const code = encodeBackup(), ta = document.getElementById("f-backup");
       if(ta) ta.value = code;
@@ -880,6 +913,13 @@ document.addEventListener("change", (e)=>{
     save(); render(); return;
   }
   if(el.id === "f-place"){ ui.placeSel = +el.value; if(ui.confirm){ ui.confirm = null; render(); } return; }
+  if(el.id === "m-plan" || el.id === "m-pace"){ if(el.id === "m-plan") ui.mPlan = el.value; else ui.mPace = +el.value; ui.confirm = null; render(); return; }
+  if(el.id === "w-plan" || el.id === "w-pace" || el.id === "w-start"){
+    const st = document.getElementById("w-start").value; if(ISO.test(st)) S.start = st;
+    const spec = parsePlanKey(document.getElementById("w-plan").value, document.getElementById("w-pace").value);
+    if(planKey(spec) !== planKey(S.plan) || spec.pace !== S.plan.pace){ S.plan = spec; S.readings = buildReadings(spec); }
+    render(); return;
+  }
   const p = el.dataset.path; if(!p) return;
   if(p === "start"){ if(ISO.test(el.value) && el.value !== S.start){ S.start = el.value; save(); render(); toast("Start date changed"); } return; }
   needsRender = true; maybeRender();
